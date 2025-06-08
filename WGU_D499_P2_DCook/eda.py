@@ -197,10 +197,6 @@ def eda_identify_row_nan(dataframe):
 
     nan_row_dataframe['row_nan_total_sum'] = nan_row_dataframe.isna().sum(axis=1)
 
-    print("Proportion of Missing Values per Row:")  
-    print(nan_row_dataframe['row_nan_total_mean'].describe())   
-    print("\n" + "-"*50 + "\n")
-    
 
     print("Proportion of Missing Values per Row:")  
     print(nan_row_dataframe['row_nan_total_mean'].describe())   

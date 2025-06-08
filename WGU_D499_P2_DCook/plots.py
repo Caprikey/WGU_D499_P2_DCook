@@ -171,49 +171,6 @@ def plot_bar_eda_column_missing_severity(dataframe, top_n=30):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
-def plot_countplot_compare_row_nan_dist_per_column(dataframe_low, dataframe_high, column_name):
-    #figure_size = (14, 3)
-    #figure_size = (12, 3)
-    figure_size = (10, 2.5)
-    
-    fig, axes = plt.subplots(1, 2, figsize=figure_size)
-
-    sns.countplot(
-        data=dataframe_low,
-        x=column_name,
-        color='blue',
-        ax=axes[0]
-    )
-    
-    axes[0].set_title('Low subset')
-    axes[0].set_ylabel('Count')
-    axes[0].set_xlabel(column_name)
-
-    sns.countplot(
-        data=dataframe_high,
-        x=column_name,
-        color='red',
-        ax=axes[1]
-    )
-    axes[1].set_title('High subset')
-    axes[1].set_ylabel('Count')
-    axes[1].set_xlabel(column_name)
-
-    max_count = max(axes[0].get_ylim()[1], axes[1].get_ylim()[1])
-    axes[0].set_ylim(0, max_count)
-    axes[1].set_ylim(0, max_count)
-
-    plt.tight_layout()
-    plt.show()
-
-    # Save the plot
-    output_path = FIGURES_DIR / "plot_countplot_eda_column_row_nan_dist_{column_name}.png"
-    plt.savefig(output_path)
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
-
 # This function performs EDA on the row-wise NaN counts of a DataFrame and plots two histograms, 
 # One for total average per row
 # One for total sum of NaN values per row 
@@ -263,8 +220,9 @@ def plot_hist_row_nan_eda(nan_row_eda_dataframe, original_dataframe_len = None):
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
+# This one is called from in a loop on the notebook.
 
-def compare_row_nan_distribution_per_column(dataframe_low, dataframe_high, column_name):
+def plot_countplout_compare_row_nan_distribution_per_column(dataframe_low, dataframe_high, column_name):
     #figure_size = (14, 3)
     #figure_size = (12, 3)
     figure_size = (10, 2.5)
@@ -302,6 +260,50 @@ def compare_row_nan_distribution_per_column(dataframe_low, dataframe_high, colum
     # Save the plot
     output_path = FIGURES_DIR / "plot_countplot_column_row_nan_dist_{column_name}.png"
     plt.savefig(output_path)
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+# This one is called from the eda_row_nan_divide_by_threshold in the eda.py file
+
+def plot_countplot_compare_row_nan_dist_per_column(dataframe_low, dataframe_high, column_name):
+    #figure_size = (14, 3)
+    #figure_size = (12, 3)
+    figure_size = (10, 2.5)
+    
+    fig, axes = plt.subplots(1, 2, figsize=figure_size)
+
+    sns.countplot(
+        data=dataframe_low,
+        x=column_name,
+        color='blue',
+        ax=axes[0]
+    )
+    
+    axes[0].set_title('Low subset')
+    axes[0].set_ylabel('Count')
+    axes[0].set_xlabel(column_name)
+
+    sns.countplot(
+        data=dataframe_high,
+        x=column_name,
+        color='red',
+        ax=axes[1]
+    )
+    axes[1].set_title('High subset')
+    axes[1].set_ylabel('Count')
+    axes[1].set_xlabel(column_name)
+
+    max_count = max(axes[0].get_ylim()[1], axes[1].get_ylim()[1])
+    axes[0].set_ylim(0, max_count)
+    axes[1].set_ylim(0, max_count)
+
+    plt.tight_layout()
+    plt.show()
+
+    # Save the plot
+    output_path = FIGURES_DIR / "plot_countplot_eda_column_row_nan_dist_{column_name}.png"
+    plt.savefig(output_path)
+
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 

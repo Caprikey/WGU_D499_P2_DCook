@@ -126,6 +126,8 @@ def get_fs_string_conversions_failed():
 # Converting list in string format back to list format
 # https://stackoverflow.com/questions/27442093/how-to-convert-a-list-into-string-and-this-string-back-to-the-initial-list#:~:text=You%20can%20use%20ast.
 
+null_dict = {}
+
 def convert_unknown_missing_to_nan(main_df, missing_unknown_df, verbose=False):
 
     for index, row in missing_unknown_df.iterrows():
@@ -143,12 +145,46 @@ def convert_unknown_missing_to_nan(main_df, missing_unknown_df, verbose=False):
             replace_with = np.nan
             main_df[column_name].replace(to_replace=item, value=replace_with, inplace=True)
     
+        post_null_count = main_df[column_name].isnull().sum()
+
+        # Store null counts in null_dict
+        null_dict[column_name] = {
+            'pre_null_count': pre_null_count,
+            'post_null_count': post_null_count
+        }
 
         if verbose:
-            post_null_count = main_df[column_name].isnull().sum()
             print(f"{column_name}: {pre_null_count} --> {post_null_count} nulls after converting {match_items_total} values")
 
-    return main_df
+    return main_df, null_dict
+
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
+def null_dict_to_dataframe(null_dictionary):
+    """
+    Converts the null_dict to a DataFrame for easier analysis.
+    """
+    if not null_dictionary:
+        print("null_dictionary is empty. Returning an empty DataFrame.")
+        return pd.DataFrame()
+
+    # Convert the dictionary to a DataFrame
+    # Each key becomes a row, and each value becomes a column
+    null_dataframe = pd.DataFrame.from_dict(null_dictionary, orient='index')
+
+    # Reset index to turn column names into a column
+    null_dataframe.reset_index(inplace=True)
+
+    # Rename the index column to 'column'
+    null_dataframe.rename(columns={'index': 'column'}, inplace=True)
+
+
+    return null_dataframe
+
+
+
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 

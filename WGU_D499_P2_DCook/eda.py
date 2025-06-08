@@ -241,7 +241,7 @@ def eda_row_nan_find_dynamic_nan_threshold(dataframe, num_clusters = 3, num_init
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
-from WGU_D499_P2_DCook.plots import compare_row_nan_distribution_per_column
+from WGU_D499_P2_DCook.plots import plot_countplot_compare_row_nan_dist_per_column
 
 def eda_row_nan_divide_by_threshold(dataframe, 
                                     max_loss_allowed=0.20, 
@@ -333,7 +333,8 @@ def eda_row_nan_divide_by_threshold(dataframe,
     if plot_graph:
         print("Generating Graph Output")
         for column in eda_row_nan_common_columns:
-            compare_row_nan_distribution_per_column(eda_low_row_nan_df, eda_high_row_nan_df, column)
+            #compare_row_nan_distribution_per_column(eda_low_row_nan_df, eda_high_row_nan_df, column)
+            plot_countplot_compare_row_nan_dist_per_column(eda_low_row_nan_df, eda_high_row_nan_df, column)
 
     # Return results
     if return_common_columns:

@@ -109,13 +109,15 @@ def plot_bar_column_nan_percentage(dataframe):
     ax.set_xticklabels(nan_percentage.index, rotation=90)
     ax.set_ylim(0, 100)
 
-    plt.show()
+
 
     # Save the plot
     output_path = FIGURES_DIR / "column_nan_eda_percentage_bar_plot.png"
     plt.savefig(output_path)
     
     logger.info(f"Plot saved to {output_path}")
+
+    plt.show()
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
@@ -152,7 +154,7 @@ def plot_bar_eda_column_missing_severity(dataframe, top_n=30):
     plt.xlabel('Column Name')
     plt.legend(title='Severity Level', bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.tight_layout()
-    plt.show()
+
 
 
     # Save the plot
@@ -175,37 +177,40 @@ def plot_bar_eda_column_missing_severity(dataframe, top_n=30):
 # One for total average per row
 # One for total sum of NaN values per row 
 
-def plot_hist_row_nan_eda(nan_row_eda_dataframe, original_dataframe_len = None):
 
 
-    fig, axes = plt.subplots(1, 2, figsize=(18,6))
+def plot_hist_row_nan_eda(nan_row_eda_dataframe):
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig, axes = plt.subplots(1, 2, figsize=(12,4))
 
     mean_values = nan_row_eda_dataframe['row_nan_total_mean']
+    mean_bins = np.linspace(mean_values.min(), mean_values.max(), 30)
 
-    mean_counts, mean_bins, _ = axes[0].hist(mean_values, bins=30, edgecolor='black', color = 'skyblue')
+    #mean_counts, mean_bins, _ = axes[0].hist(mean_values, bins=30, edgecolor='black', color = 'skyblue')
     
+    axes[0].hist(mean_values, bins=mean_bins, edgecolor='black', color = 'skyblue')
     axes[0].set_xlabel('Average Missing Totals per Row')
     axes[0].set_ylabel('Frequency')
     axes[0].set_title('Histogram of Average Missing values per Row')
     axes[0].grid(True)
 
-
-    if original_dataframe_len is None:
-        original_dataframe_len = len(nan_row_eda_dataframe)
-
     sum_values = nan_row_eda_dataframe['row_nan_total_sum']
-    max_missing = original_dataframe_len
+    sum_bins = range(0, sum_values.max() + 2) 
 
-    sum_counts, sum_bins, _ = axes[1].hist(sum_values, bins=range(0, max_missing + 2), color='salmon', edgecolor='black', align='left')
+    #max_missing = sum_values.max()
+    #sum_counts, sum_bins, _ = axes[1].hist(sum_values, bins=range(0, max_missing + 2), color='salmon', edgecolor='black', align='left')
 
+    axes[1].hist(sum_values, bins=sum_bins, color='salmon', edgecolor='black', align='left')
     axes[1].set_xlabel('Count of Missing Values per Row')
     axes[1].set_ylabel('Frequency')
     axes[1].set_title('Histogram: Missing Value Count per Row')
     axes[1].grid(True)
 
     plt.tight_layout()
-    plt.show();
-    
+
     print("Proportion of Missing Values per Row:")  
     print(nan_row_eda_dataframe['row_nan_total_mean'].describe())   
 
@@ -218,7 +223,131 @@ def plot_hist_row_nan_eda(nan_row_eda_dataframe, original_dataframe_len = None):
     output_path = FIGURES_DIR / "plot_hist_row_nan_eda.png"
     plt.savefig(output_path)
 
+    print("✅ Plot ready. Displaying...")
+    plt.show()
+    plt.close(fig)
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+def plot_nan_proportion_histogram(mean_values):
+    """
+    Plot histogram of the proportion of missing values per row.
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+
+    mean_bins = np.linspace(mean_values.min(), mean_values.max(), 30)
+    ax.hist(mean_values, bins=mean_bins, edgecolor='black', color='skyblue')
+
+    ax.set_xlabel('Proportion of Missing Values per Row')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Histogram: Missing Value Proportion per Row')
+    ax.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+    plt.close(fig)
+
+#### #### #### #### #### #### #### #### 
+
+def plot_nan_count_histogram(sum_values):
+    """
+    Plot histogram of the count of missing values per row.
+    """
+    fig, ax = plt.subplots(figsize=(6, 4))
+
+    sum_bins = range(0, int(sum_values.max()) + 2)
+    ax.hist(sum_values, bins=sum_bins, edgecolor='black', color='salmon', align='left')
+
+    ax.set_xlabel('Count of Missing Values per Row')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Histogram: Missing Value Count per Row')
+    ax.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+    plt.close(fig)
+
+#### #### #### #### #### #### #### #### 
+
+def plot_hist_row_nan_eda_v2(nan_row_eda_dataframe):
+    """
+    Wrapper function to call both histogram plotters.
+    """
+    print("✅ Plotting histograms for missing values per row...")
+    plot_nan_proportion_histogram(nan_row_eda_dataframe['row_nan_total_mean'])
+    plot_nan_count_histogram(nan_row_eda_dataframe['row_nan_total_sum'])
+
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+def plot_nan_proportion_histogram_side_by_side(ax, mean_values):
+    """
+    Plot histogram of the proportion of missing values per row in a side-by-side manner.
+    """
+
+    mean_bins = np.linspace(mean_values.min(), mean_values.max(), 30)
+    ax.hist(mean_values, bins=mean_bins, edgecolor='black', color='skyblue')
+    ax.set_xlabel('Proportion of Missing Values per Row')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Histogram: Missing Value Proportion per Row')
+    ax.grid(True)
+
+#### #### #### #### #### #### #### #### 
+
+
+def plot_nan_count_histogram_side_by_side(ax, sum_values):
+    """
+    Plot histogram of the count of missing values per row in a side-by-side manner.
+    """
+
+    sum_bins = range(0, int(sum_values.max()) + 2)
+    ax.hist(sum_values, bins=sum_bins, edgecolor='black', color='salmon', align='left')
+    ax.set_xlabel('Count of Missing Values per Row')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Histogram: Missing Value Count per Row')
+    ax.grid(True)
+
+#### #### #### #### #### #### #### #### 
+
+def plot_hist_row_nan_eda_side_by_side(nan_row_eda_dataframe):
+    """
+    Wrapper function to call both histogram plotters side by side
+    """
+    print("✅ Plotting histograms for missing values per row...")
+    # This was replaced with the plot_nan_proportion_histogram_side_by_side and plot_nan_count_histogram_side_by_side functions above
+    # To call them one after the other vertically do it this way without the stuff below.
+    #plot_nan_proportion_histogram(nan_row_eda_dataframe['row_nan_total_mean'])
+    #plot_nan_count_histogram(nan_row_eda_dataframe['row_nan_total_sum'])
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+
+    plot_nan_proportion_histogram_side_by_side(axes[0], nan_row_eda_dataframe['row_nan_total_mean'])
+    plot_nan_count_histogram_side_by_side(axes[1], nan_row_eda_dataframe['row_nan_total_sum'])
+
+
+    # This was replaced with the display_describe_column_comparison_side_by_side from the utils py file.
+    #print("Proportion of Missing Values per Row:")  
+    #print(nan_row_eda_dataframe['row_nan_total_mean'].describe())   
+
+    #print("\n" + "-"*50 + "\n")
+    
+    #print("Count of Missing Values per Row:") 
+    #print(nan_row_eda_dataframe['row_nan_total_sum'].describe())
+
+    plt.tight_layout()
+    plt.show()
+    plt.close(fig)
+
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
 
 # This one is called from in a loop on the notebook.
 
@@ -255,11 +384,13 @@ def plot_countplout_compare_row_nan_distribution_per_column(dataframe_low, dataf
     axes[1].set_ylim(0, max_count)
 
     plt.tight_layout()
-    plt.show()
+
 
     # Save the plot
     output_path = FIGURES_DIR / "plot_countplot_column_row_nan_dist_{column_name}.png"
     plt.savefig(output_path)
+
+    plt.show()
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
@@ -298,11 +429,15 @@ def plot_countplot_compare_row_nan_dist_per_column(dataframe_low, dataframe_high
     axes[1].set_ylim(0, max_count)
 
     plt.tight_layout()
-    plt.show()
+
+    # file name creation
+    file_name = f"plot_countplot_eda_column_row_nan_dist_{column_name}.png"
 
     # Save the plot
-    output_path = FIGURES_DIR / "plot_countplot_eda_column_row_nan_dist_{column_name}.png"
+    output_path = FIGURES_DIR / file_name
     plt.savefig(output_path)
+
+    plt.show()
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -348,7 +483,8 @@ def scree_plot(pca):
     output_path = FIGURES_DIR / "plot_scree_v1.png"
     plt.savefig(output_path)
 
-
+    plt.show()
+    
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 # From Helper.py 
@@ -392,6 +528,8 @@ def scree_plot_v2(pca):
     output_path = FIGURES_DIR / "plot_scree_v2.png"
     plt.savefig(output_path)
 
+    plt.show()
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
@@ -424,11 +562,13 @@ def plot_pca_heatmap(pca, feature_names, num_components=5, figsize=(14,8), cmap=
     plt.ylabel('Principal Components')
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.show()
+
 
     # Save the plot
     output_path = FIGURES_DIR / "plot_heatmap_pca.png"
     plt.savefig(output_path)
+
+    plt.show()
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -446,11 +586,13 @@ def plot_kmeans_elbow_method(model_score, clusters_range=(2, 30), step_interval=
     ax.set(ylabel='avg distance', xlabel='# Clusters: k')
     ax.grid()
     plt.xticks(np.arange(start, end, step_interval))
-    plt.show()
+
 
     # Save the plot
     output_path = FIGURES_DIR / "plot_elbow_kmeans.png"
     plt.savefig(output_path)
+
+    plt.show()
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
@@ -465,11 +607,11 @@ def plot_elbow(model_score, clusters_range):
     ax.set_ylabel("Sum of squared distances")
     ax.set_title("Kmeans - Cluster distances vs No. of Clusters")
     
-    plt.show()
-
     # Save the plot
     output_path = FIGURES_DIR / "plot_elbow_kmeans_v2.png"
     plt.savefig(output_path)
+    
+    plt.show()
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
@@ -483,12 +625,14 @@ def plot_elbow_with_knee_locator(model_scores, cluster_range, optimal_k):
     plt.ylabel("Average Within-Cluster Distance")
     plt.legend()
     plt.grid(True)
-    plt.show()
+
 
     # Save the plot
     output_path = FIGURES_DIR / "plot_elbow_kmeans_kneelocator.png"
     plt.savefig(output_path)
 
+
+    plt.show()
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -521,11 +665,14 @@ def plot_cluster_distribution(cluster_info):
 
     fig.suptitle("Cluster Distributions")
     fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-    plt.show()
 
     # Save the plot
     output_path = FIGURES_DIR / "plot_bar_cluster_distribution.png"
     plt.savefig(output_path)
+
+
+    plt.show()
+
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -550,11 +697,13 @@ def plot_cluster_proportions(cluster_info):
 
     fig.suptitle("Percentage of people under each cluster")
     fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-    plt.show()
+
 
     # Save the plot
     output_path = FIGURES_DIR / "plot_bar_cluster_proportions.png"
     plt.savefig(output_path)
+
+    plt.show()
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 

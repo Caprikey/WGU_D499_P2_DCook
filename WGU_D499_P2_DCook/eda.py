@@ -186,7 +186,6 @@ def get_invalid_level_eda_identify_outlier_columns():
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
-
 def eda_identify_row_nan(dataframe):
 
     nan_row_dataframe = dataframe.copy()

@@ -135,14 +135,17 @@ def convert_unknown_missing_to_nan(main_df, missing_unknown_df, verbose=False):
         column_name = row['attribute']
 
         pre_null_count = main_df[column_name].isnull().sum()
+
         match_items_total = 0
         
         for item in row['missing_or_unknown']:
 
             match_count = main_df[column_name].value_counts().get(item, 0)
+
             match_items_total += match_count
             
             replace_with = np.nan
+            
             main_df[column_name].replace(to_replace=item, value=replace_with, inplace=True)
     
         post_null_count = main_df[column_name].isnull().sum()
@@ -184,7 +187,24 @@ def null_dict_to_dataframe(null_dictionary):
     return null_dataframe
 
 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
+
+from IPython.display import display
+
+def display_describe_column_comparison_side_by_side(dataframe, column_name_1, column_name_2, dc1_name=None, dc2_name=None):
+    describe_column_1 = dataframe[column_name_1].describe()
+    describe_column_2 = dataframe[column_name_2].describe()
+
+    # Convert both to DataFrames for better side-by-side display
+    describe_column_1_df = describe_column_1.to_frame(name=dc1_name if dc1_name else column_name_1)
+    describe_column_2_df = describe_column_2.to_frame(name=dc2_name if dc2_name else column_name_2)
+    
+
+    combined_dataframes = pd.concat([describe_column_1_df, describe_column_2_df], axis=1)
+    display(combined_dataframes)
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 

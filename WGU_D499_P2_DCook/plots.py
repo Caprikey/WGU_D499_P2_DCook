@@ -442,6 +442,38 @@ def plot_countplot_compare_row_nan_dist_per_column(dataframe_low, dataframe_high
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
+def plot_barplot_compare_row_nan_dist_per_column_percentage(dataframe_low, dataframe_high, column_name):
+    figure_size = (10, 2.5)
+    fig, axes = plt.subplots(1, 2, figsize=figure_size)
+
+    # Calculate percentages for low subset
+    low_counts = dataframe_low[column_name].value_counts(normalize=True).sort_index() * 100
+    low_dataframe = pd.DataFrame({column_name: low_counts.index, 'percentage': low_counts.values})
+    
+    sns.barplot(x=column_name, y='percentage', data=low_dataframe, color='blue', ax=axes[0])
+    axes[0].set_title('Low subset')
+    axes[0].set_ylabel('Percentage (%)')
+    axes[0].set_ylim(0, 100)
+    axes[0].set_xlabel(column_name)
+
+    # Calculate percentages for high subset
+    high_counts = dataframe_high[column_name].value_counts(normalize=True).sort_index() * 100
+    high_dataframe = pd.DataFrame({column_name: high_counts.index, 'percentage': high_counts.values})
+    
+    sns.barplot(x=column_name, y='percentage', data=high_dataframe, color='red', ax=axes[1])
+    axes[1].set_title('High subset')
+    axes[1].set_ylabel('Percentage (%)')
+    axes[1].set_ylim(0, 100)
+    axes[1].set_xlabel(column_name)
+
+    plt.tight_layout()
+
+    # Save file if you want (uncomment and define FIGURES_DIR)
+    # file_name = f"plot_countplot_eda_column_row_nan_dist_{column_name}.png"
+    # output_path = FIGURES_DIR / file_name
+    # plt.savefig(output_path)
+
+    plt.show()
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 

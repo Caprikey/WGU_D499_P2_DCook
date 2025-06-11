@@ -342,7 +342,6 @@ def eda_row_nan_divide_by_threshold(dataframe,
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
-
 def countplot_data_summary(dataframe_low, dataframe_high, column_name, normalize=False):
     """
     Returns count data for a column from two dataframes instead of plotting.
@@ -368,7 +367,6 @@ def countplot_data_summary(dataframe_low, dataframe_high, column_name, normalize
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
-
 def countplot_data_summary_multicol(dataframe_low, dataframe_high, column_list, normalize=False):
     """
     Returns count data for multiple columns from two dataframes instead of plotting.
@@ -386,18 +384,20 @@ def countplot_data_summary_multicol(dataframe_low, dataframe_high, column_list, 
 
     summary_dict = {}
 
-    for col in column_list:
-        low_counts = dataframe_low[col].value_counts(normalize=normalize).rename('low_subset')
-        high_counts = dataframe_high[col].value_counts(normalize=normalize).rename('high_subset')
+    for column in column_list:
+        low_counts = dataframe_low[column].value_counts(normalize=normalize).rename('low_subset')
+        high_counts = dataframe_high[column].value_counts(normalize=normalize).rename('high_subset')
 
         combined = pd.concat([low_counts, high_counts], axis=1).fillna(0).astype(float)
-        summary_dict[col] = combined.sort_index()
+        summary_dict[column] = combined.sort_index()
 
     return summary_dict
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+# Not Using
 
 from scipy.stats import chi2_contingency
+import pandas as pd
 
 def chi2_comparisons(summary_dict):
     chi2_results = {}
@@ -415,29 +415,37 @@ def chi2_comparisons(summary_dict):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def calculate_proportion_diff(summary_dict):
-    diff_dict = {}
-    for col, df in summary_dict.items():
-        total_low = df["low_subset"].sum()
-        total_high = df["high_subset"].sum()
-        
-        df_copy = df.copy()
-        df_copy["low_pct"] = df["low_subset"] / total_low
-        df_copy["high_pct"] = df["high_subset"] / total_high
-        df_copy["pct_diff"] = (df_copy["high_pct"] - df_copy["low_pct"]).abs()
 
-        diff_dict[col] = df_copy.sort_values("pct_diff", ascending=False)
+    diff_dict = {}
+    
+    for column, dataframe in summary_dict.items():
+    
+        total_low = dataframe["low_subset"].sum()
+        total_high = dataframe["high_subset"].sum()
+        
+        dataframe_copy = dataframe.copy()
+
+        dataframe_copy["low_subset"] = dataframe["low_subset"].fillna(0)
+        dataframe_copy["high_subset"] = dataframe["high_subset"].fillna(0)
+
+        dataframe_copy["low_pct"] = dataframe["low_subset"] / total_low
+        dataframe_copy["high_pct"] = dataframe["high_subset"] / total_high
+        dataframe_copy["pct_diff"] = (dataframe_copy["high_pct"] - dataframe_copy["low_pct"]).abs()
+
+        diff_dict[column] = dataframe_copy.sort_values("pct_diff", ascending=False)
 
     return diff_dict
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def print_proportion_diff(diff_dict, top_n=5):
-    for col, df in diff_dict.items():
-        print(f"\n=== Column: {col} ===")
-        # Select top N rows with largest difference
-        top_diff = df.head(top_n).copy()
+    for column, dataframe in diff_dict.items():
         
-        # Format percentages nicely
+        print(f"\n=== Column: {column} ===")
+        # Select top N rows with largest difference
+        top_diff = dataframe.head(top_n).copy()
+        
+        # Format percentages 
         top_diff["low_pct"] = (top_diff["low_pct"] * 100).map("{:.2f}%".format)
         top_diff["high_pct"] = (top_diff["high_pct"] * 100).map("{:.2f}%".format)
         top_diff["pct_diff"] = (top_diff["pct_diff"] * 100).map("{:.2f}%".format)
@@ -447,97 +455,36 @@ def print_proportion_diff(diff_dict, top_n=5):
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
-import pandas as pd
-
 def combine_proportion_diff_to_dataframe(diff_dict, top_n=None):
-    combined_rows = []
-    for col, dataframe in diff_dict.items():
-        dataframe_copy = dataframe.copy()
-        dataframe_copy["column_name"] = col
-        
-        # Optionally select only top_n rows per column
-        if top_n is not None:
-            dataframe_copy = dataframe_copy.head(top_n)
-        
-        # Format percentage columns as floats (not strings) for further processing
-        dataframe_copy["low_pct"] = dataframe_copy["low_subset"] / dataframe_copy["low_subset"].sum()
-        dataframe_copy["high_pct"] = dataframe_copy["high_subset"] / dataframe_copy["high_subset"].sum()
-        dataframe_copy["pct_diff"] = (dataframe_copy["high_pct"] - dataframe_copy["low_pct"]).abs()
-        
-        combined_rows.append(dataframe_copy.reset_index())
-    
-    combined_dataframe = pd.concat(combined_rows, ignore_index=True)
-    
-    # Optional: reorder columns for readability
-    cols = ["column_name"] + list(combined_dataframe.columns.drop("column_name"))
-    combined_dataframe = combined_dataframe[cols]
-    
-    return combined_dataframe
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
-import pandas as pd
-
-def combine_proportion_diff_to_dataframe_v2(diff_dict, top_n=None):
-    
-    combined_rows = []
-    
-    for col, dataframe in diff_dict.items():
-        dataframe_copy = dataframe[["low_pct", "high_pct", "pct_diff"]].copy()
-        dataframe_copy = dataframe_copy.sort_values("pct_diff", ascending=False)
-        
-        if top_n is not None:
-            dataframe_copy = dataframe_copy.head(top_n)
-        
-        dataframe_copy = dataframe_copy.reset_index().rename(columns={"index": "value"})
-        dataframe_copy["column_name"] = col
-        
-        combined_rows.append(dataframe_copy)
-    
-    combined_dataframe = pd.concat(combined_rows, ignore_index=True)
-    cols = ["column_name"] + [c for c in combined_dataframe.columns if c != "column_name"]
-
-
-    # Optional: reorder columns for readability
-    #cols = ["column_name"] + list(combined_dataframe.columns.drop("column_name"))
-    #combined_dataframe = combined_dataframe[cols]
-
-    #combined_dataframe = combined_dataframe[["column_name", "value", "low_pct", "high_pct", "pct_diff"]]
-    
-    return combined_dataframe[cols]
-
-
-
-def combine_proportion_diff_to_dataframe_v3(diff_dict, top_n=None):
     import pandas as pd
 
     combined_rows = []
 
-    for col, df in diff_dict.items():
-        # Keep only the percentage columns
-        df_copy = df[["low_pct", "high_pct", "pct_diff"]].copy()
+    for column, dataframe in diff_dict.items():
+        
+        dataframe_copy = dataframe[["low_subset", "high_subset", "low_pct", "high_pct", "pct_diff"]].copy()
 
-        # Reset index and name it "column_value" regardless of previous name
-        df_copy = df_copy.reset_index()
-        df_copy = df_copy.rename(columns={df_copy.columns[0]: "column_value"})
+        
+        dataframe_copy = dataframe_copy.reset_index()
+        dataframe_copy = dataframe_copy.rename(columns={dataframe_copy.columns[0]: "column_value"})
 
-        # Add the name of the column being analyzed
-        df_copy["column_name"] = col
+        
+        dataframe_copy["column_name"] = column
 
         # Limit to top_n rows if requested
         if top_n is not None:
-            df_copy = df_copy.sort_values("pct_diff", ascending=False).head(top_n)
+            dataframe_copy = dataframe_copy.sort_values("pct_diff", ascending=False).head(top_n)
 
-        combined_rows.append(df_copy)
+        combined_rows.append(dataframe_copy)
 
     # Combine all rows
-    combined_df = pd.concat(combined_rows, ignore_index=True)
+    combined_dataframe = pd.concat(combined_rows, ignore_index=True)
 
     # Reorder columns for clarity
-    combined_df = combined_df[["column_name", "column_value", "low_pct", "high_pct", "pct_diff"]]
+    combined_dataframe = combined_dataframe[["column_name", "column_value", "low_subset", "high_subset", "low_pct", "high_pct", "pct_diff"]]
 
-    return combined_df
-    
+    return combined_dataframe
+
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 

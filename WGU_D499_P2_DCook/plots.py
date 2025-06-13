@@ -354,7 +354,7 @@ def plot_hist_row_nan_eda_side_by_side(nan_row_eda_dataframe):
 def plot_countplout_compare_row_nan_distribution_per_column(dataframe_low, dataframe_high, column_name):
     #figure_size = (14, 3)
     #figure_size = (12, 3)
-    figure_size = (10, 2.5)
+    figure_size = (10, 6)
     
     fig, axes = plt.subplots(1, 2, figsize=figure_size)
 
@@ -399,7 +399,7 @@ def plot_countplout_compare_row_nan_distribution_per_column(dataframe_low, dataf
 def plot_countplot_compare_row_nan_dist_per_column(dataframe_low, dataframe_high, column_name):
     #figure_size = (14, 3)
     #figure_size = (12, 3)
-    figure_size = (10, 2.5)
+    figure_size = (5, 10)
     
     fig, axes = plt.subplots(1, 2, figsize=figure_size)
 

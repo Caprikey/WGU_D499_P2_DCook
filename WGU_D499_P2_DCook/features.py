@@ -101,8 +101,6 @@ def column_correction_anrede_kz(dataframe):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
-
-
 def column_correction_cameo_deu_2015(dataframe):
 
     # Removing first character
@@ -126,6 +124,47 @@ def column_correction_cameo_deu_2015(dataframe):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
+# Original Method to perform multilevel encoding mapping 
+
+#def column_correction_encode_multilevel_with_map(dataframe, column_name, dictionary):
+#    dataframe[column_name] = dataframe[column_name].map(dictionary)
+#    dataframe[column_name] = dataframe[column_name].astype('category')
+#    return dataframe
+
+#### #### #### #### 
+
+# example function call prior to 'apply if exists' fail-safe function
+
+#azdias_general_demographics = column_correction_encode_multilevel_with_map(azdias_general_demographics, 'LP_FAMILIE_GROB', convert_familie_int_to_label)
+
+#azdias_general_demographics = column_correction_encode_multilevel_with_map(azdias_general_demographics, 'LP_STATUS_GROB', convert_status_int_to_label)
+
+#### #### #### #### 
+
+# example funciton call after 'apply if exists' fail-safe function
+
+#azdias_general_demographics =  apply_if_column_exists(
+#    azdias_general_demographics,
+#    'LP_FAMILIE_GROB',
+#    column_correction_encode_multilevel_with_map,
+#    convert_familie_int_to_label,
+#    remove_if_missing=True,
+#    remove_from_lists=[binary_columns_first_pass_list, multilevel_columns_first_pass_list],
+#    apply_per_column=True
+#)
+
+#azdias_general_demographics =  apply_if_column_exists(
+#    azdias_general_demographics,
+#    'LP_STATUS_GROB',
+#    column_correction_encode_multilevel_with_map,
+#    convert_status_int_to_label,
+#    remove_if_missing=True,
+#    remove_from_lists=[binary_columns_first_pass_list, multilevel_columns_first_pass_list],
+#    apply_per_column=True
+#)
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
 def feature_mapping(
@@ -212,7 +251,6 @@ def feature_mapping(
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
 
 
 def column_encode_multi_category_to_single_onehot(dataframe, column_name, drop_first_flag = False, drop_original=True):

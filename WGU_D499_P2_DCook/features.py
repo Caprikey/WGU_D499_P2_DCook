@@ -373,7 +373,7 @@ def column_reengineering_cameo_intl_2015(dataframe, one_hot_encode=False, keep_o
     # Verify the values are digits
     valid_mask = cameo.str.isdigit()
 
-    # Apply the mask to the column and extract only the signal digit
+    # Apply the mask to the column and extract only the single digit
     dataframe.loc[valid_mask, 'CAMEO_INTL_2015_WEALTH'] = cameo[valid_mask].str[0].astype(int)
     dataframe.loc[valid_mask, 'CAMEO_INTL_2015_LIFE_STAGE'] = cameo[valid_mask].str[1].astype(int)
     

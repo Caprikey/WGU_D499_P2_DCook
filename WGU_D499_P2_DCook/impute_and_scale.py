@@ -41,8 +41,6 @@ def main(
 
 
 
-
-
 def perform_scale_data(prescaled_dataframe, features_dataframe):
     """
     Scale data using parameters from rows with no missing values,

@@ -44,7 +44,6 @@ def main(
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
-
 def plot_hist_column_nan_percentage(column_nan_eda_percentage_dataframe):
     """
     Plots the percentage of NaN values per column in a DataFrame.
@@ -563,7 +562,6 @@ def scree_plot_v2(pca):
     plt.show()
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
 
 
 def plot_pca_heatmap(pca, feature_names, num_components=5, figsize=(14,8), cmap='coolwarm'):

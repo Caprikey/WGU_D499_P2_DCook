@@ -736,6 +736,120 @@ def plot_cluster_proportions(cluster_info):
 
     plt.show()
 
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def plot_cluster_proportions(comparison_dataframe):
+    plt.figure(figsize=(12, 6))
+    sns.barplot(
+        data=comparison_dataframe,
+        x='cluster',
+        y='proportion',
+        hue='dataset'
+    )
+    plt.title('Cluster Proportions by Dataset')
+    plt.ylabel('Proportion')
+    plt.xlabel('Cluster')
+    plt.legend(title='Dataset')
+    plt.tight_layout()
+    plt.show()
+
+def plot_cluster_counts(comparison_dataframe):
+    plt.figure(figsize=(12, 6))
+    sns.barplot(
+        data=comparison_dataframe,
+        x='cluster',
+        y='count',
+        hue='dataset'
+    )
+    plt.title('Cluster Proportions by Dataset')
+    plt.ylabel('Proportion')
+    plt.xlabel('Cluster')
+    plt.legend(title='Dataset')
+    plt.tight_layout()
+    plt.show()
+
+
+
+def plot_ratio_to_baseline(comparison_dataframe):
+    plt.figure(figsize=(12, 6))
+    sns.barplot(
+        data=comparison_dataframe,
+        x='cluster',
+        y='ratio_to_baseline',
+        hue='dataset'
+    )
+    plt.axhline(1.0, color='gray', linestyle='--', label='Baseline (1.0)')
+    plt.title('Ratio to Baseline by Cluster')
+    plt.ylabel('Ratio (Customer / Population)')
+    plt.xlabel('Cluster')
+    plt.legend(title='Dataset')
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_difference_to_baseline(comparison_dataframe):
+    plt.figure(figsize=(12, 6))
+    sns.barplot(
+        data=comparison_dataframe,
+        x='cluster',
+        y='difference_to_baseline',
+        hue='dataset'
+    )
+    plt.axhline(1.0, color='gray', linestyle='--', label='Baseline (0.0)')
+    plt.title('Difference to Baseline by Cluster')
+    plt.ylabel('Difference (Customer / Population)')
+    plt.xlabel('Cluster')
+    plt.legend(title='Dataset')
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_over_under_representation(comparison_dataframe, method = 'ratio', threshold=0.05):
+    # Add flag for over/under representation
+    dataframe = comparison_dataframe.copy()
+
+    if method == 'ratio':
+        dataframe['representation'] = dataframe['ratio_to_baseline'].apply(
+            lambda x: 'Over-represented' if x > (1 + threshold) else ('Under-represented' if x < (1 - threshold) else 'Neutral')
+        )
+        method_y = 'ratio_to_baseline'
+        method_label_y = 'Difference In Proportion'
+
+    elif method == 'difference':
+        dataframe['representation'] = dataframe['difference_to_baseline'].apply(
+            lambda x: 'Over-represented' if x > threshold else ('Under-represented' if x < -threshold else 'Neutral')
+        )
+        method_y = 'difference_to_baseline'
+        method_label_y = 'Difference in Count'
+    else:
+        raise ValueError("Method must be either 'ratio' or 'difference'.")  
+    
+    plt.figure(figsize=(12, 6))
+    
+    sns.barplot(
+        data=dataframe,
+        x='cluster',
+        y=method_y,
+        hue='representation',
+        dodge=False,
+        palette={'Over-represented': 'green', 'Under-represented': 'red', 'Neutral': 'gray'}
+    )
+    plt.axhline(0, color='black', linewidth=1)
+    plt.title(f'Difference to Baseline (Threshold = +/-{threshold})')
+    plt.ylabel(method_label_y)
+    plt.xlabel('Cluster')
+    plt.legend(title='Representation')
+    plt.tight_layout()
+    plt.show()
+
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 

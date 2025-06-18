@@ -246,7 +246,12 @@ def generate_cluster_comparision_dataframe(dataframe_list, labels_list, dataset_
     else:
         raise ValueError("At least two datasets are required for comparison. Please provide more than one dataset.")
     
-    
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
 def generate_cluster_comparision_dataframe_v2(dataframe_list, labels_list, dataset_names=None, baseline_dataset=None):
     """
     Combine multiple dataframes into a single dataframe for comparison.
@@ -356,6 +361,37 @@ def generate_cluster_comparision_dataframe_v2(dataframe_list, labels_list, datas
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
+
+def show_top_features_per_centroid(centroids_dataframe, top_x=10, only_clusters=None):
+    feature_dataframe = centroids_dataframe.copy()
+    if 'cluster' in feature_dataframe.columns:
+        feature_dataframe = feature_dataframe.drop(columns=['cluster'])
+
+    if only_clusters is not None:
+        feature_dataframe = feature_dataframe[feature_dataframe.index.isin(only_clusters)]
+
+    for cluster_idx, row in feature_dataframe.iterrows():
+        print(f"\nCluster {cluster_idx} - Top {top_x} POSITIVE features:")
+        top_pos = row.sort_values(ascending=False).head(top_x)
+        display(top_pos)
+
+        print(f"\nCluster {cluster_idx} - Top {top_x} NEGATIVE features:")
+        top_neg = row.sort_values().head(top_x)
+        display(top_neg)
+
+        print("\n" + "-"*60)
+
+
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
 
 def filter_clusters_by_threshold(dataframe, method='Difference', threshold=0.2, absolute=True):
     """

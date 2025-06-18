@@ -52,9 +52,9 @@ def get_info_to_dataframe(dataframe):
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
-def compare_dataframe_info(df1, df2):
-    info1 = get_info_to_dataframe(df1)
-    info2 = get_info_to_dataframe(df2)
+def compare_dataframe_info(dataframe1, dataframe2):
+    info1 = get_info_to_dataframe(dataframe1)
+    info2 = get_info_to_dataframe(dataframe2)
 
     # Rename columns for clarity before merging
     info1.columns = [f"{col} (df1)" for col in info1.columns]

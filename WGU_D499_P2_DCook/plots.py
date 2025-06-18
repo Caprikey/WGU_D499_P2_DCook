@@ -77,8 +77,8 @@ def plot_hist_column_nan_percentage(column_nan_eda_percentage_dataframe):
 
     plt.show()
 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
 def plot_bar_column_nan_percentage(dataframe):
@@ -117,6 +117,7 @@ def plot_bar_column_nan_percentage(dataframe):
     logger.info(f"Plot saved to {output_path}")
 
     plt.show()
+
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
@@ -165,8 +166,6 @@ def plot_bar_eda_column_missing_severity(dataframe, top_n=30):
     plt.show()
 
 
-
-
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -175,7 +174,6 @@ def plot_bar_eda_column_missing_severity(dataframe, top_n=30):
 # This function performs EDA on the row-wise NaN counts of a DataFrame and plots two histograms, 
 # One for total average per row
 # One for total sum of NaN values per row 
-
 
 
 def plot_hist_row_nan_eda(nan_row_eda_dataframe):
@@ -226,6 +224,7 @@ def plot_hist_row_nan_eda(nan_row_eda_dataframe):
     plt.show()
     plt.close(fig)
 
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
@@ -250,7 +249,9 @@ def plot_nan_proportion_histogram(mean_values):
     plt.show()
     plt.close(fig)
 
+
 #### #### #### #### #### #### #### #### 
+
 
 def plot_nan_count_histogram(sum_values):
     """
@@ -270,7 +271,9 @@ def plot_nan_count_histogram(sum_values):
     plt.show()
     plt.close(fig)
 
+
 #### #### #### #### #### #### #### #### 
+
 
 def plot_hist_row_nan_eda_v2(nan_row_eda_dataframe):
     """
@@ -282,6 +285,7 @@ def plot_hist_row_nan_eda_v2(nan_row_eda_dataframe):
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -298,6 +302,7 @@ def plot_nan_proportion_histogram_side_by_side(ax, mean_values):
     ax.set_title('Histogram: Missing Value Proportion per Row')
     ax.grid(True)
 
+
 #### #### #### #### #### #### #### #### 
 
 
@@ -313,7 +318,9 @@ def plot_nan_count_histogram_side_by_side(ax, sum_values):
     ax.set_title('Histogram: Missing Value Count per Row')
     ax.grid(True)
 
+
 #### #### #### #### #### #### #### #### 
+
 
 def plot_hist_row_nan_eda_side_by_side(nan_row_eda_dataframe):
     """
@@ -346,7 +353,6 @@ def plot_hist_row_nan_eda_side_by_side(nan_row_eda_dataframe):
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
 
 # This one is called from in a loop on the notebook.
 
@@ -390,6 +396,7 @@ def plot_countplout_compare_row_nan_distribution_per_column(dataframe_low, dataf
     plt.savefig(output_path)
 
     plt.show()
+
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
@@ -475,6 +482,7 @@ def plot_barplot_compare_row_nan_dist_per_column_percentage(dataframe_low, dataf
 
     plt.show()
 
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -516,7 +524,8 @@ def scree_plot(pca):
     plt.savefig(output_path)
 
     plt.show()
-    
+
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 # From Helper.py 
@@ -562,6 +571,7 @@ def scree_plot_v2(pca):
 
     plt.show()
 
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
@@ -601,6 +611,7 @@ def plot_pca_heatmap(pca, feature_names, num_components=5, figsize=(14,8), cmap=
 
     plt.show()
 
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -625,6 +636,7 @@ def plot_kmeans_elbow_method(model_score, clusters_range=(2, 30), step_interval=
 
     plt.show()
 
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
@@ -644,7 +656,9 @@ def plot_elbow(model_score, clusters_range):
     
     plt.show()
 
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
 
 def plot_elbow_with_knee_locator(model_scores, cluster_range, optimal_k):
 
@@ -664,6 +678,8 @@ def plot_elbow_with_knee_locator(model_scores, cluster_range, optimal_k):
 
 
     plt.show()
+
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -710,6 +726,41 @@ def plot_cluster_distribution(cluster_info):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
+def plot_combined_cluster_distribution(cluster_info, title_suffix="", save_as="plot_combined_cluster_distribution.png"):
+    """
+    Plots a combined barplot comparing cluster proportions for general population vs customers.
+    
+    Args:
+        cluster_info (pd.DataFrame): DataFrame with columns 'Cluster', 'Population', 'Customers' (as proportions or counts).
+        title_suffix (str): Optional suffix for the plot title.
+        save_as (str): Filename for saving the plot.
+    """
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Melt the dataframe to long-form for seaborn
+    cluster_info_melted = cluster_info.melt(id_vars='Cluster', value_vars=['Population', 'Customers'],
+                                            var_name='Dataset', value_name='Proportion')
+
+    plt.figure(figsize=(12, 6))
+    sns.barplot(data=cluster_info_melted, x='Cluster', y='Proportion', hue='Dataset')
+
+    plt.title(f"Cluster Proportion Comparison {title_suffix}", fontsize=14)
+    plt.ylabel("Proportion" if cluster_info[['Population', 'Customers']].max().max() <= 1 else "No. of People")
+    plt.xlabel("Cluster")
+    plt.axhline(1, color='red', linestyle='--', alpha=0.3)  # Optional reference line at 1 (for ratios)
+    plt.legend(title='Dataset')
+
+    output_path = FIGURES_DIR / save_as
+    plt.savefig(output_path)
+    plt.show()
+
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
 def plot_cluster_proportions(cluster_info):
     cluster_info["Pop_proportion"] = (cluster_info["Population"]/cluster_info["Population"].sum()*100).round(2)
     cluster_info["Cust_proportion"] = (cluster_info["Customers"]/cluster_info["Customers"].sum()*100).round(2)
@@ -741,7 +792,6 @@ def plot_cluster_proportions(cluster_info):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
-#### 
 
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -761,7 +811,11 @@ def plot_cluster_proportions(comparison_dataframe):
     plt.tight_layout()
     plt.show()
 
-#### 
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+ 
 
 def plot_cluster_counts(comparison_dataframe):
     plt.figure(figsize=(12, 6))
@@ -778,7 +832,11 @@ def plot_cluster_counts(comparison_dataframe):
     plt.tight_layout()
     plt.show()
 
-#### 
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
 
 def plot_ratio_to_baseline(comparison_dataframe):
     plt.figure(figsize=(12, 6))
@@ -797,7 +855,10 @@ def plot_ratio_to_baseline(comparison_dataframe):
     plt.show()
 
 
-#### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
 
 
 def plot_difference_to_baseline(comparison_dataframe):
@@ -817,8 +878,10 @@ def plot_difference_to_baseline(comparison_dataframe):
     plt.show()
 
 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
-#### 
 
 def plot_over_under_representation(comparison_dataframe, method = 'ratio', threshold=0.05):
     # Add flag for over/under representation
@@ -858,7 +921,11 @@ def plot_over_under_representation(comparison_dataframe, method = 'ratio', thres
     plt.tight_layout()
     plt.show()
 
-#### 
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+ 
 
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -887,6 +954,10 @@ def plot_absolute_cluster_proportions(cluster_comparison):
     plt.show()
 
 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
 
 def plot_ratio_to_baseline(cluster_comparison):
     """
@@ -912,9 +983,49 @@ def plot_ratio_to_baseline(cluster_comparison):
     plt.tight_layout()
     plt.show()
 
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
+def plot_combined_cluster_distribution(cluster_info_dataframe, title_suffix="", save_as="plot_combined_cluster_distribution.png"):
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    cluster_info_dataframe_melted = cluster_info_dataframe.melt(id_vars='Cluster', value_vars=['Population', 'Customers'],
+                                            var_name='Dataset', value_name='Proportion')
+
+    plt.figure(figsize=(12, 6))
+    sns.barplot(data=cluster_info_dataframe_melted, x='Cluster', y='Proportion', hue='Dataset')
+
+    plt.title(f"Cluster Proportion Comparison {title_suffix}", fontsize=14)
+    plt.ylabel("Proportion" if cluster_info_dataframe[['Population', 'Customers']].max().max() <= 1 else "No. of People")
+    plt.xlabel("Cluster")
+    plt.axhline(1, color='red', linestyle='--', alpha=0.3)
+    plt.legend(title='Dataset')
+
+    output_path = FIGURES_DIR / save_as
+    plt.savefig(output_path)
+    plt.show()
+
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
+
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
 
 if __name__ == "__main__":
     app()

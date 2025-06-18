@@ -741,6 +741,7 @@ def plot_cluster_proportions(cluster_info):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
+#### 
 
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -760,6 +761,8 @@ def plot_cluster_proportions(comparison_dataframe):
     plt.tight_layout()
     plt.show()
 
+#### 
+
 def plot_cluster_counts(comparison_dataframe):
     plt.figure(figsize=(12, 6))
     sns.barplot(
@@ -775,7 +778,7 @@ def plot_cluster_counts(comparison_dataframe):
     plt.tight_layout()
     plt.show()
 
-
+#### 
 
 def plot_ratio_to_baseline(comparison_dataframe):
     plt.figure(figsize=(12, 6))
@@ -794,6 +797,9 @@ def plot_ratio_to_baseline(comparison_dataframe):
     plt.show()
 
 
+#### 
+
+
 def plot_difference_to_baseline(comparison_dataframe):
     plt.figure(figsize=(12, 6))
     sns.barplot(
@@ -810,6 +816,9 @@ def plot_difference_to_baseline(comparison_dataframe):
     plt.tight_layout()
     plt.show()
 
+
+
+#### 
 
 def plot_over_under_representation(comparison_dataframe, method = 'ratio', threshold=0.05):
     # Add flag for over/under representation
@@ -849,6 +858,59 @@ def plot_over_under_representation(comparison_dataframe, method = 'ratio', thres
     plt.tight_layout()
     plt.show()
 
+#### 
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def plot_absolute_cluster_proportions(cluster_comparison):
+    """
+    Plots the absolute proportions of clusters in the general population and customer data.
+    
+    Args:
+        cluster_comparison (pd.DataFrame): DataFrame containing cluster information with columns 'cluster', 'proportion', and 'dataset'.
+    """
+    
+    plt.figure(figsize=(12, 6))
+    sns.barplot(
+        data=cluster_comparison,
+        x='cluster',
+        y='proportion',
+        hue='dataset',
+        palette='Set2'
+    )
+    plt.title("Cluster Proportions: General Population vs Customer Data")
+    plt.ylabel("Proportion")
+    plt.xlabel("Cluster")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
+
+def plot_ratio_to_baseline(cluster_comparison):
+    """
+    Plots the ratio of customer to population proportions for each cluster.
+    
+    Args:
+        cluster_comparison (pd.DataFrame): DataFrame containing cluster information with columns 'cluster', 'ratio_to_baseline', and 'dataset'.
+    """
+    
+    ratio_df = cluster_comparison[cluster_comparison['dataset'] != 'General Population']
+
+    sns.barplot(
+        data=ratio_df,
+        x='cluster',
+        y='ratio_to_baseline',
+        hue='dataset',
+        palette='coolwarm'
+    )
+    plt.axhline(1, color='gray', linestyle='--')
+    plt.title("Customer Data Cluster Ratio to General Population")
+    plt.ylabel("Ratio (Customer / General Pop)")
+    plt.xlabel("Cluster")
+    plt.tight_layout()
+    plt.show()
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 

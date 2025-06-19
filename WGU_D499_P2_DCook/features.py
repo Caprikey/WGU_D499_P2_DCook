@@ -748,7 +748,8 @@ class FeatureTransformer:
                     dataframe = self.convert_data_type(dataframe, **op["params"])
         
             else:
-                print(f'Column: {column} was not found. Skipping operation: {op['type']}.')
+                op_type = op['type']
+                print(f"Column: {column} was not found. Skipping operation: {op_type}.")
                 self.skipped_columns.append(column)
                 pass
             

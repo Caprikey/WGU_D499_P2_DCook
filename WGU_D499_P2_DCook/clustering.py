@@ -363,9 +363,10 @@ def generate_cluster_comparision_dataframe_v2(dataframe_list, labels_list, datas
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 
-
 def show_top_features_per_centroid(centroids_dataframe, top_x=10, only_clusters=None):
+    
     feature_dataframe = centroids_dataframe.copy()
+    
     if 'cluster' in feature_dataframe.columns:
         feature_dataframe = feature_dataframe.drop(columns=['cluster'])
 
@@ -383,6 +384,54 @@ def show_top_features_per_centroid(centroids_dataframe, top_x=10, only_clusters=
 
         print("\n" + "-"*60)
 
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
+def show_top_features_per_centroid_v2(centroids_dataframe, top_x=10, only_clusters=None, pos_or_neg=None):
+    
+    feature_dataframe = centroids_dataframe.copy()
+    
+    if 'cluster' in feature_dataframe.columns:
+        feature_dataframe = feature_dataframe.drop(columns=['cluster'])
+
+    if only_clusters is not None:
+        #feature_dataframe = feature_dataframe[feature_dataframe.index.isin(only_clusters)]
+        feature_dataframe = feature_dataframe.loc[only_clusters]
+
+    if pos_or_neg is None:
+
+        for cluster_idx, row in feature_dataframe.iterrows():
+            print(f"\nCluster {cluster_idx} - Top {top_x} POSITIVE features:")
+            top_pos = row.sort_values(ascending=False).head(top_x)
+            display(top_pos)
+
+            print(f"\nCluster {cluster_idx} - Top {top_x} NEGATIVE features:")
+            top_neg = row.sort_values().head(top_x)
+            display(top_neg)
+
+            print("\n" + "-"*60)
+    elif pos_or_neg == 'positive':
+        for cluster_idx, row in feature_dataframe.iterrows():
+            print(f"\nCluster {cluster_idx} - Top {top_x} POSITIVE features:")
+            top_pos = row.sort_values(ascending=False).head(top_x)
+            display(top_pos)
+
+            print("\n" + "-"*60)
+
+    elif pos_or_neg == 'negative':
+        for cluster_idx, row in feature_dataframe.iterrows():
+            print(f"\nCluster {cluster_idx} - Top {top_x} NEGATIVE features:")
+            top_neg = row.sort_values().head(top_x)
+            display(top_neg)
+
+            print("\n" + "-"*60)
+
+    else:
+        raise ValueError(f"Unsupported pos_or_neg value '{pos_or_neg}'. Use 'positive', 'negative', or None.")
+    
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 

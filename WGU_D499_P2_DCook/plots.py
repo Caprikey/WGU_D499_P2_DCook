@@ -684,313 +684,6 @@ def plot_elbow_with_knee_locator(model_scores, cluster_range, optimal_k):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
-def plot_cluster_distribution(cluster_info):
-    """
-    Plots the distribution of clusters in terms of population and customers.
-    
-    Args:
-        cluster_info (pd.DataFrame): DataFrame containing cluster information with columns 'Cluster', 'Population', and 'Customers'.
-    """
-    
-    import matplotlib.pyplot as plt
-
-    # Ensure the DataFrame has the required columns
-    if not all(col in cluster_info.columns for col in ['Cluster', 'Population', 'Customers']):
-        raise ValueError("DataFrame must contain 'Cluster', 'Population', and 'Customers' columns.")
-    
-    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10, 4))
-
-    ax1.bar(cluster_info["Cluster"], cluster_info["Population"])
-    ax1.set_xlabel("Cluster")
-    ax1.set_ylabel("No. of People")
-    ax1.set_title("General Population")
-
-    ax2.bar(cluster_info["Cluster"], cluster_info["Customers"])
-    ax2.set_xlabel("Cluster")
-    ax2.set_ylabel("No. of People")
-    ax2.set_title("Customers")
-
-    fig.suptitle("Cluster Distributions")
-    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-
-    # Save the plot
-    output_path = FIGURES_DIR / "plot_bar_cluster_distribution.png"
-    plt.savefig(output_path)
-
-
-    plt.show()
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
-
-def plot_combined_cluster_distribution(cluster_info, title_suffix="", save_as="plot_combined_cluster_distribution.png"):
-    """
-    Plots a combined barplot comparing cluster proportions for general population vs customers.
-    
-    Args:
-        cluster_info (pd.DataFrame): DataFrame with columns 'Cluster', 'Population', 'Customers' (as proportions or counts).
-        title_suffix (str): Optional suffix for the plot title.
-        save_as (str): Filename for saving the plot.
-    """
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
-    # Melt the dataframe to long-form for seaborn
-    cluster_info_melted = cluster_info.melt(id_vars='Cluster', value_vars=['Population', 'Customers'],
-                                            var_name='Dataset', value_name='Proportion')
-
-    plt.figure(figsize=(12, 6))
-    sns.barplot(data=cluster_info_melted, x='Cluster', y='Proportion', hue='Dataset')
-
-    plt.title(f"Cluster Proportion Comparison {title_suffix}", fontsize=14)
-    plt.ylabel("Proportion" if cluster_info[['Population', 'Customers']].max().max() <= 1 else "No. of People")
-    plt.xlabel("Cluster")
-    plt.axhline(1, color='red', linestyle='--', alpha=0.3)  # Optional reference line at 1 (for ratios)
-    plt.legend(title='Dataset')
-
-    output_path = FIGURES_DIR / save_as
-    plt.savefig(output_path)
-    plt.show()
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
-def plot_cluster_proportions(cluster_info):
-    cluster_info["Pop_proportion"] = (cluster_info["Population"]/cluster_info["Population"].sum()*100).round(2)
-    cluster_info["Cust_proportion"] = (cluster_info["Customers"]/cluster_info["Customers"].sum()*100).round(2)
-
-    fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10, 4))
-
-    ax1.bar(cluster_info["Cluster"], cluster_info["Pop_proportion"])
-    ax1.set_xlabel("Cluster")
-    ax1.set_ylabel("Proportion of Total (%)")
-    ax1.set_title("General Population")
-
-    ax2.bar(cluster_info["Cluster"], cluster_info["Cust_proportion"])
-    ax2.set_xlabel("Cluster")
-    ax2.set_ylabel("Proportion of Total (%)")
-    ax2.set_title("Customers")
-
-    fig.suptitle("Percentage of people under each cluster")
-    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-
-
-    # Save the plot
-    output_path = FIGURES_DIR / "plot_bar_cluster_proportions.png"
-    plt.savefig(output_path)
-
-    plt.show()
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
-
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-def plot_cluster_proportions(comparison_dataframe):
-    plt.figure(figsize=(12, 6))
-    sns.barplot(
-        data=comparison_dataframe,
-        x='cluster',
-        y='proportion',
-        hue='dataset'
-    )
-    plt.title('Cluster Proportions by Dataset')
-    plt.ylabel('Proportion')
-    plt.xlabel('Cluster')
-    plt.legend(title='Dataset')
-    plt.tight_layout()
-    plt.show()
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
- 
-
-def plot_cluster_counts(comparison_dataframe):
-    plt.figure(figsize=(12, 6))
-    sns.barplot(
-        data=comparison_dataframe,
-        x='cluster',
-        y='count',
-        hue='dataset'
-    )
-    plt.title('Cluster Proportions by Dataset')
-    plt.ylabel('Proportion')
-    plt.xlabel('Cluster')
-    plt.legend(title='Dataset')
-    plt.tight_layout()
-    plt.show()
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
-
-def plot_ratio_to_baseline(comparison_dataframe):
-    plt.figure(figsize=(12, 6))
-    sns.barplot(
-        data=comparison_dataframe,
-        x='cluster',
-        y='ratio_to_baseline',
-        hue='dataset'
-    )
-    plt.axhline(1.0, color='gray', linestyle='--', label='Baseline (1.0)')
-    plt.title('Ratio to Baseline by Cluster')
-    plt.ylabel('Ratio (Customer / Population)')
-    plt.xlabel('Cluster')
-    plt.legend(title='Dataset')
-    plt.tight_layout()
-    plt.show()
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
-
-
-def plot_difference_to_baseline(comparison_dataframe):
-    plt.figure(figsize=(12, 6))
-    sns.barplot(
-        data=comparison_dataframe,
-        x='cluster',
-        y='difference_to_baseline',
-        hue='dataset'
-    )
-    plt.axhline(1.0, color='gray', linestyle='--', label='Baseline (0.0)')
-    plt.title('Difference to Baseline by Cluster')
-    plt.ylabel('Difference (Customer / Population)')
-    plt.xlabel('Cluster')
-    plt.legend(title='Dataset')
-    plt.tight_layout()
-    plt.show()
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
-
-def plot_over_under_representation(comparison_dataframe, method = 'ratio', threshold=0.05):
-    # Add flag for over/under representation
-    dataframe = comparison_dataframe.copy()
-
-    if method == 'ratio':
-        dataframe['representation'] = dataframe['ratio_to_baseline'].apply(
-            lambda x: 'Over-represented' if x > (1 + threshold) else ('Under-represented' if x < (1 - threshold) else 'Neutral')
-        )
-        method_y = 'ratio_to_baseline'
-        method_label_y = 'Difference In Proportion'
-
-    elif method == 'difference':
-        dataframe['representation'] = dataframe['difference_to_baseline'].apply(
-            lambda x: 'Over-represented' if x > threshold else ('Under-represented' if x < -threshold else 'Neutral')
-        )
-        method_y = 'difference_to_baseline'
-        method_label_y = 'Difference in Count'
-    else:
-        raise ValueError("Method must be either 'ratio' or 'difference'.")  
-    
-    plt.figure(figsize=(12, 6))
-    
-    sns.barplot(
-        data=dataframe,
-        x='cluster',
-        y=method_y,
-        hue='representation',
-        dodge=False,
-        palette={'Over-represented': 'green', 'Under-represented': 'red', 'Neutral': 'gray'}
-    )
-    plt.axhline(0, color='black', linewidth=1)
-    plt.title(f'Difference to Baseline (Threshold = +/-{threshold})')
-    plt.ylabel(method_label_y)
-    plt.xlabel('Cluster')
-    plt.legend(title='Representation')
-    plt.tight_layout()
-    plt.show()
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
- 
-
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-def plot_absolute_cluster_proportions(cluster_comparison):
-    """
-    Plots the absolute proportions of clusters in the general population and customer data.
-    
-    Args:
-        cluster_comparison (pd.DataFrame): DataFrame containing cluster information with columns 'cluster', 'proportion', and 'dataset'.
-    """
-    
-    plt.figure(figsize=(12, 6))
-    sns.barplot(
-        data=cluster_comparison,
-        x='cluster',
-        y='proportion',
-        hue='dataset',
-        palette='Set2'
-    )
-    plt.title("Cluster Proportions: General Population vs Customer Data")
-    plt.ylabel("Proportion")
-    plt.xlabel("Cluster")
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
-
-def plot_ratio_to_baseline(cluster_comparison):
-    """
-    Plots the ratio of customer to population proportions for each cluster.
-    
-    Args:
-        cluster_comparison (pd.DataFrame): DataFrame containing cluster information with columns 'cluster', 'ratio_to_baseline', and 'dataset'.
-    """
-    
-    ratio_df = cluster_comparison[cluster_comparison['dataset'] != 'General Population']
-
-    sns.barplot(
-        data=ratio_df,
-        x='cluster',
-        y='ratio_to_baseline',
-        hue='dataset',
-        palette='coolwarm'
-    )
-    plt.axhline(1, color='gray', linestyle='--')
-    plt.title("Customer Data Cluster Ratio to General Population")
-    plt.ylabel("Ratio (Customer / General Pop)")
-    plt.xlabel("Cluster")
-    plt.tight_layout()
-    plt.show()
-
-
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
-
 
 def plot_combined_cluster_distribution(cluster_info_dataframe, title_suffix="", save_as="plot_combined_cluster_distribution.png"):
     import pandas as pd
@@ -1015,8 +708,98 @@ def plot_combined_cluster_distribution(cluster_info_dataframe, title_suffix="", 
 
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
+def plot_combined_cluster_distribution_v2(cluster_info_dataframe_melted, target_dataset = None, baseline_dataset = None, save_as="plot_combined_cluster_distribution_v2.png"):
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    plt.figure(figsize=(12, 6))
+    sns.barplot(data=cluster_info_dataframe_melted, x='Cluster', y='Proportion', hue='Dataset')
+
+    plt.title(f"Cluster Proportion Comparison ({target_dataset} vs {baseline_dataset})", fontsize=14)
+    plt.ylabel("Proportion")
+    plt.xlabel("Cluster")
+    plt.legend(title='Dataset')
+
+    plt.tight_layout()
+
+    output_path = FIGURES_DIR / save_as
+    plt.savefig(output_path)
+    plt.show()
+
+
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
+
+def plot_difference_of_proportions(cluster_info_dataframe, target_dataset=None, baseline_dataset=None):
+    """ 
+    Plots the difference of proportions of clusters between customers and population.
+
+    Args:
+        cluster_info_dataframe (pd.DataFrame): DataFrame containing cluster information with columns 'Cluster',
+        
+    """
+    
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+
+    dataset_one = cluster_info_dataframe[
+        (cluster_info_dataframe['dataset'] == baseline_dataset) & 
+        (cluster_info_dataframe['compared_to'] == baseline_dataset)
+    ].reset_index(drop=True)
+
+    dataset_two = cluster_info_dataframe[
+        (cluster_info_dataframe['dataset'] == target_dataset) & 
+        (cluster_info_dataframe['compared_to'] == baseline_dataset)
+    ].reset_index(drop=True)
+
+
+    temp_cluster_info_dataframe = pd.DataFrame({
+        'Cluster': dataset_one['cluster'],
+        f'{baseline_dataset}': dataset_one['proportion'],
+        f'{target_dataset}' : dataset_two['proportion']
+})
+
+
+    temp_cluster_info_dataframe["Difference"] = temp_cluster_info_dataframe[f"{target_dataset}"] - temp_cluster_info_dataframe[f"{baseline_dataset}"]
+
+
+    plt.figure(figsize=(12, 6))
+    barplot = sns.barplot(
+        x="Cluster", 
+        y="Difference", 
+        data=temp_cluster_info_dataframe,
+        palette=["#d62728" if diff < 0 else "#2ca02c" for diff in temp_cluster_info_dataframe["Difference"]]
+    )
+
+    plt.title(f"Difference of Proportions: ({target_dataset} - {baseline_dataset})", fontsize=14)
+    plt.xlabel("Cluster")
+    plt.ylabel("Difference in Proportion")
+    plt.axhline(0, color='black', linewidth=1)
+
+    # Save
+    output_path = FIGURES_DIR / f"plot_difference_of_proportions_{target_dataset}_vs_{baseline_dataset}.png"
+    plt.tight_layout()
+    plt.savefig(output_path)
+
+    plt.show()
+
+
+
+
+
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
+
+
 
 
 

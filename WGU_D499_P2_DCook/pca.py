@@ -49,14 +49,15 @@ def main(
 
 def do_pca_v2(n_components, prescaled_data):
     '''
-    Transforms data using PCA to create n_components, and provides back the results of the
-    transformation.
+    Transforms data using PCA to create n_components, and provides back the results of the transformation.
 
-    INPUT: n_components - int - the number of principal components to create
-           data - the data you would like to transform
+    args: 
+        n_components: int, the number of components to keep in the PCA transformation
+        prescaled_data: the data to be transformed, already scaled (DataFrame or np.array)
 
-    OUTPUT: pca - the pca object created after fitting the data
-            prescaled_data_pca - the transformed X matrix with new number of components
+    returns: 
+        pca - the pca object created after fitting the data
+        prescaled_data_pca - the transformed X matrix with new number of components
     '''
     #X = StandardScaler().fit_transform(data)
     pca = PCA(n_components)
@@ -72,9 +73,14 @@ def do_pca_v2(n_components, prescaled_data):
 
 def pca_results(full_dataset, pca, plot=True):
 	'''
-	Create a DataFrame of the PCA results
-	Includes dimension feature weights and explained variance
-	Visualizes the PCA results
+	Create a DataFrame of the PCA results Includes dimension feature weights and explained variance Visualizes the PCA results
+     
+    args:
+        full_dataset: the original dataset (DataFrame)
+        pca: the PCA object after fitting the data
+        plot: boolean, whether to plot the PCA results (default=True)
+    returns:
+        pd.DataFrame: a DataFrame containing explained variance and PCA components
 	'''
 
 	# Dimension indexing
@@ -125,11 +131,13 @@ def explained_variance_component_check(dataframe, pca_function, explained_varian
     - pca_function: a function that accepts n_components and dataframe, and returns (pca, transformed_data)
     - explained_variance_threshold: float, the cumulative variance you want to reach (default=0.85)
     - start: the initial number of components to test (default=3)
+    - plot: boolean, whether to plot the PCA results (default=False)
 
     Returns:
     - num_comps: number of components that meet/exceed the threshold
     - pca: the final fitted PCA object
     - comp_check: DataFrame with explained variance and component weights
+    - plots the PCA results if plot=True
     """
     
     for comp in range(start, dataframe.shape[1] + 1):
@@ -166,6 +174,7 @@ def auto_pick_pca_components(dataframe, explained_variance_threshold=0.85, max_c
     Returns:
     - pca: fitted PCA object
     - n_components: number of components selected
+    - plots the cumulative explained variance if show_plot=True
     """
     from sklearn.decomposition import PCA
 
@@ -216,9 +225,14 @@ def investigate_PC(pca, component, feature_names):
     #code inspired by helper_functions.py in PCA lesson
     '''
     Prints association of a feature to the weights of its components
-    INPUT: pca: PCA object, compnent: which component is to be investigated (0 indexed),
-            feature_names: the corresponding feature names to PCA
-    OUTPUT: None
+    
+    args:
+        pca: the PCA object after fitting the data
+        component: int, the index of the principal component to investigate (0-indexed)
+        feature_names: list of feature names corresponding to the PCA components
+
+    returns: 
+        None, prints the top and bottom features associated with the specified principal component
     '''
     
     num_out = 10

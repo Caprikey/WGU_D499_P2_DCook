@@ -82,7 +82,19 @@ def compute_average_within_cluster_distance(pca_data, clusters_range, step_inter
 
 
 def get_Kmeans_scores(pca_data, cluster_range, step_interval = 1):
+
+    """
+    Quick note: this function is missing a docstring. Here's a simple one you can add to match your project style.
     
+    Args:
+        pca_data: The PCA-transformed data to be clustered.
+        cluster_range: A tuple (start, end) defining the range of clusters to evaluate.
+        step_interval: The interval between cluster numbers to evaluate.
+    Returns:
+        model_scores: A list of scores for each number of clusters.
+        clusters_range: A range object representing the number of clusters evaluated.
+    """
+
     model_scores = []
     
     start, end = cluster_range
@@ -119,11 +131,13 @@ def find_optimal_k_knee(model_scores, cluster_range):
     Find the optimal number of clusters using the KneeLocator.
     
     Parameters:
-    - scores: List of scores for each number of clusters.
-    - range_: Range of cluster numbers.
+    - model_scores: List of scores for each number of clusters.
+    - cluster_range: Range of cluster numbers.
     
     Returns:
     - The optimal number of clusters according to KneeLocator.
+    - cluster_range: Range of cluster numbers.
+    - model_scores: List of scores for each number of clusters.
     """
 
 
@@ -150,9 +164,12 @@ def generate_cluster_comparision_dataframe(dataframe_list, labels_list, dataset_
     - dataframe_list: List of dataframes to combine.
     - labels_list: List of labels corresponding to each dataframe.
     - dataset_names: Optional list of names for each dataset. If not provided, defaults to 'dataset_1', 'dataset_2', etc.
+    - baseline_dataset: Optional name of the baseline dataset for comparison. If not provided, defaults to the first dataset in dataset_names.
     
     Returns:
-    - A single dataframe with an additional 'cluster' and 'dataset' column for comparison.
+    - combined_clusters_dataframe: A single dataframe with an additional 'cluster' and 'dataset' column for comparison.
+    - cluster_comparision_dataframe: A dataframe comparing clusters across datasets.
+
     """
     
     if not isinstance(dataframe_list, list):
@@ -260,9 +277,12 @@ def generate_cluster_comparision_dataframe_v2(dataframe_list, labels_list, datas
     - dataframe_list: List of dataframes to combine.
     - labels_list: List of labels corresponding to each dataframe.
     - dataset_names: Optional list of names for each dataset. If not provided, defaults to 'dataset_1', 'dataset_2', etc.
+    - baseline_dataset: Optional name of the baseline dataset for comparison. If not provided, defaults to the first dataset in dataset_names.
     
     Returns:
-    - A single dataframe with an additional 'cluster' and 'dataset' column for comparison.
+    - combined_clusters_dataframe: A single dataframe with an additional 'cluster' and 'dataset' column for comparison.
+    - cluster_comparision_dataframe: A dataframe comparing clusters across datasets.
+
     """
     
     if not isinstance(dataframe_list, list):
@@ -364,7 +384,18 @@ def generate_cluster_comparision_dataframe_v2(dataframe_list, labels_list, datas
 
 
 def show_top_features_per_centroid(centroids_dataframe, top_x=10, only_clusters=None):
+    """
+    Quick note: this function is missing a docstring. Here's a simple one you can add to match your project style.
     
+    Args:
+        centroids_dataframe: DataFrame containing the centroids of clusters.
+        top_x: Number of top features to display for each cluster.
+        only_clusters: Optional list of cluster indices to filter the display. If None, all clusters are displayed.
+
+    Returns:
+        None: This function prints the top features for each cluster and does not return anything.
+    """
+
     feature_dataframe = centroids_dataframe.copy()
     
     if 'cluster' in feature_dataframe.columns:
@@ -391,7 +422,18 @@ def show_top_features_per_centroid(centroids_dataframe, top_x=10, only_clusters=
 
 
 def show_top_features_per_centroid_v2(centroids_dataframe, top_x=10, only_clusters=None, pos_or_neg=None):
+    """
+    Quick note: this function is missing a docstring. Here's a simple one you can add to match your project style.
     
+    Args:
+        centroids_dataframe: DataFrame containing the centroids of clusters.
+        top_x: Number of top features to display for each cluster.
+        only_clusters: Optional list of cluster indices to filter the display. If None, all clusters are displayed.
+        pos_or_neg: Optional parameter to filter by 'positive', 'negative', or None (default is None).
+    Returns:
+        None: This function prints the top features for each cluster and does not return anything.
+    """
+
     feature_dataframe = centroids_dataframe.copy()
     
     if 'cluster' in feature_dataframe.columns:
@@ -452,8 +494,6 @@ def filter_clusters_by_threshold(dataframe, method='Difference', threshold=0.2, 
     - threshold: Threshold value to decide significance (e.g. 0.2 means 20% difference or ratio deviation)
     - absolute: Whether to consider absolute value (default True). For ratio threshold, usually absolute=False.
 
-
-
     Returns:
     - Threshold Comparision DataFrame containing only rows meeting threshold criteria.
     """
@@ -500,7 +540,6 @@ def filter_clusters_by_threshold(dataframe, method='Difference', threshold=0.2, 
 
 
 
-
 def filter_clusters_by_threshold_v2(dataframe, method='Difference', threshold=0.2, absolute=True):
     """
     Filter clusters where the ratio or difference deviates from baseline by at least threshold.
@@ -510,8 +549,6 @@ def filter_clusters_by_threshold_v2(dataframe, method='Difference', threshold=0.
     - method: What method to use for filtering ('Ratio' or 'Difference')
     - threshold: Threshold value to decide significance (e.g. 0.2 means 20% difference or ratio deviation)
     - absolute: Whether to consider absolute value (default True). For ratio threshold, usually absolute=False.
-
-
 
     Returns:
     - Threshold Comparision DataFrame containing only rows meeting threshold criteria.

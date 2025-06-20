@@ -42,7 +42,24 @@ def main(
 # Remove outlier columns from a DataFrame based on a list of outlier column names.
 
 def remove_outlier_columns(dataframe, outlier_column_list, export_outliers_to_file = True, export_file_path = "archived_data", export_file_name = "outlier_columns", update_features_summary_dataframe = False, features_summary_dataframe_object = None):
+    """
+    Removes specified outlier columns from a DataFrame and optionally exports them to a file.
     
+    Args:
+        - dataframe (pd.DataFrame): The DataFrame from which to remove outlier columns.
+        - outlier_column_list (list): List of column names to be removed as outliers.
+        - export_outliers_to_file (bool): Whether to export the outlier columns to a file.
+        - export_file_path (str): Path where the outlier columns file will be saved.
+        - export_file_name (str): Name of the file to save the outlier columns.
+        - update_features_summary_dataframe (bool): Whether to update the features summary DataFrame.
+        - features_summary_dataframe_object (pd.DataFrame): The DataFrame containing feature summaries to be updated.
+
+    Returns:
+        - pd.DataFrame: The DataFrame with outlier columns removed.
+        - pd.DataFrame: Updated features summary DataFrame if `update_features_summary_dataframe` is True, otherwise None.
+
+    """
+
     dataframe_outlier_columns = dataframe[outlier_column_list]
     
     print(f"Total of {dataframe_outlier_columns.shape[1]} were found out of a total of {dataframe.shape[1]} columns")
@@ -115,6 +132,17 @@ from sklearn.cluster import KMeans
 import numpy as np
 
 def row_nan_find_dynamic_nan_threshold(dataframe, num_clusters = 3, num_init = 'auto', rand_stat = 5654):
+    """
+    Finds a dynamic threshold for NaN values per row using KMeans clustering.
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame to analyze for NaN values.
+        num_clusters (int): The number of clusters to use in KMeans clustering.
+        num_init (int or str): Number of initializations for KMeans. Default is 'auto'.
+        rand_stat (int): Random state for reproducibility in KMeans clustering. 
+    Returns:
+        threshold (float): The dynamic threshold for NaN values per row, determined by KMeans clustering.
+    """
 
     nan_row_dataframe = dataframe.isna().mean(axis=1)
 
@@ -148,6 +176,28 @@ def row_nan_divide_by_threshold(dataframe,
                                 plot_graph=False
                                 ):
     
+    """
+    Divides a DataFrame into low and high NaN rows based on a dynamic threshold.
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame to analyze for NaN values.
+        max_loss_allowed (float): Maximum allowed loss percentage of rows due to NaN values.
+        max_nan_per_row (float): Maximum allowed NaN percentage per row.
+        method (str): Method to determine the threshold ('kmeans' or 'default').
+        return_common_columns (bool): Whether to return common columns with low NaN values.
+        allow_noise (bool): Whether to allow noise in column matching.
+        noise_threshold (float): Threshold for noise in column matching.
+        plot_graph (bool): Whether to plot graphs comparing low and high NaN distributions.
+    Returns:
+        low_row_nan_df (pd.DataFrame): DataFrame with low NaN rows.
+        high_row_nan_df (pd.DataFrame): DataFrame with high NaN rows.
+        row_nan_common_columns (list): List of common columns with low NaN values, if requested.
+        threshold_source (str): Source of the threshold used ('kmeans' or 'quantile_fallback').
+        threshold (float): The dynamic threshold for NaN values per row.
+        row_nan_common_columns (list): List of common columns with low NaN values, if requested.
+        plot comparison grapics of each column in the row_nan_common_columns list, if requested
+    """
+        
     row_nan_dataframe = dataframe.isna().mean(axis=1)
 
     # 1. Try dynamic threshold from KMeans
@@ -244,7 +294,17 @@ def row_nan_divide_by_threshold(dataframe,
 from WGU_D499_P2_DCook.dataset import write_checkpoints
 
 def export_high_row_nan(dataframe, save_path, save_name):
-
+    """
+    Exports the DataFrame with high NaN rows to a specified path and name.
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing high NaN rows.
+        save_path (str or Path): The directory path where the DataFrame will be saved.
+        save_name (str): The name of the file to save the DataFrame as.
+    Returns:
+        None
+        This function saves the DataFrame to a file at the specified path.
+    """
     write_checkpoints(save_path, save_name, dataframe)
 
 
@@ -255,6 +315,17 @@ def export_high_row_nan(dataframe, save_path, save_name):
 
 
 def safe_remove(lst, item):
+    """
+    Safely remove an item from a list if it exists.
+    
+    Args:
+        lst (list): The list from which to remove the item.
+        item: The item to be removed from the list.
+    Returns:
+        None
+        This function modifies the list in place by removing the specified item if it exists.
+    """
+    
     if item in lst:
         lst.remove(item)
 
@@ -271,14 +342,24 @@ def apply_if_column_exists(
     *args,
     **kwargs
 ):
-    """
-    Apply func(df, *args, **kwargs) if col_name exists in df.columns.
     
-    If col_name does NOT exist and remove_if_missing is True,
-    remove col_name from all lists provided in remove_from_lists.
-    
-    - remove_from_lists: list of lists to remove col_name from.
     """
+    Applies a function to a DataFrame if specified columns exist, with options to handle missing columns.
+    if the column does not exist, it can either remove the column from lists or skip the function application.
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame to check for column existence.
+        column_names (str or list): The name(s) of the column(s) to check.
+        function (callable): The function to apply if the column exists.
+        remove_if_missing (bool): Whether to remove the column from lists if it does not exist.
+        remove_from_lists (list of lists): Lists from which to remove the column if it is missing.
+        apply_per_column (bool): Whether to apply the function per existing column or once for all existing columns.
+        *args: Additional positional arguments to pass to the function.
+        **kwargs: Additional keyword arguments to pass to the function.
+    Returns:
+        pd.DataFrame: The DataFrame after applying the function, if applicable.
+    """
+
     if isinstance(column_names, str):
         column_names = [column_names]
 

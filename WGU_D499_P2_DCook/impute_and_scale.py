@@ -43,8 +43,17 @@ def main(
 
 def perform_scale_data(prescaled_dataframe, features_dataframe):
     """
-    Scale data using parameters from rows with no missing values,
-    then impute missing values and apply the precomputed scaling.
+    Scale data using parameters from rows with no missing values, then impute missing values and apply the precomputed scaling.
+
+    Args:
+        prescaled_dataframe (pd.DataFrame): DataFrame with preprocessed data, including missing values.
+        features_dataframe (pd.DataFrame): DataFrame containing feature metadata, including types and information levels.
+    Returns:
+        pd.DataFrame: Scaled DataFrame with the same columns as the scaler's feature names.
+        StandardScaler: Fitted scaler object.
+        pd.DataFrame: DataFrame containing missing information for each column.
+        SimpleImputer: Imputer for numerical columns.
+        SimpleImputer: Imputer for categorical columns. 
     """
     import pandas as pd
     from sklearn.impute import SimpleImputer
@@ -119,6 +128,18 @@ def perform_scale_data(prescaled_dataframe, features_dataframe):
 
 
 def apply_existing_scaling(prescaled_df, features_df, num_imputer, cat_imputer, scaler):
+    """
+    Apply existing scaling to a DataFrame that has already been preprocessed.
+    
+    Args:
+        prescaled_df (pd.DataFrame): DataFrame with preprocessed data, including missing values.
+        features_df (pd.DataFrame): DataFrame containing feature metadata, including types and information levels.
+        num_imputer (SimpleImputer): Imputer for numerical columns.
+        cat_imputer (SimpleImputer): Imputer for categorical columns.
+        scaler (StandardScaler): Scaler fitted on the training data.
+    Returns:
+        pd.DataFrame: Scaled DataFrame with the same columns as the scaler's feature names.
+    """
     import pandas as pd
 
     # === Identify types and imputed columns ===
@@ -165,6 +186,19 @@ def apply_existing_scaling(prescaled_df, features_df, num_imputer, cat_imputer, 
 
 
 def apply_existing_scaling_v2(prescaled_df, features_df, num_imputer, cat_imputer, scaler):
+    """
+    Apply existing scaling to a DataFrame that has already been preprocessed.
+    
+    Args:
+        prescaled_df (pd.DataFrame): DataFrame with preprocessed data, including missing values.
+        features_df (pd.DataFrame): DataFrame containing feature metadata, including types and information levels.
+        num_imputer (SimpleImputer): Imputer for numerical columns.
+        cat_imputer (SimpleImputer): Imputer for categorical columns.
+        scaler (StandardScaler): Scaler fitted on the training data.
+    Returns:
+        pd.DataFrame: Scaled DataFrame with the same columns as the scaler's feature names.
+    """
+
     # Get column names the imputers were trained on
     num_cols_fit = num_imputer.feature_names_in_
     cat_cols_fit = cat_imputer.feature_names_in_
@@ -191,6 +225,18 @@ def apply_existing_scaling_v2(prescaled_df, features_df, num_imputer, cat_impute
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def apply_existing_scaling_v3(prescaled_df, features_df, num_imputer, cat_imputer, scaler):
+    """
+    Apply existing scaling to a DataFrame that has already been preprocessed.
+    
+    Args:
+        prescaled_df (pd.DataFrame): DataFrame with preprocessed data, including missing values.
+        features_df (pd.DataFrame): DataFrame containing feature metadata, including types and information levels.
+        num_imputer (SimpleImputer): Imputer for numerical columns.
+        cat_imputer (SimpleImputer): Imputer for categorical columns.
+        scaler (StandardScaler): Scaler fitted on the training data.
+    Returns:
+        pd.DataFrame: Scaled DataFrame with the same columns as the scaler's feature names.
+    """
     import pandas as pd
 
     # Get imputation columns from trained imputers
@@ -223,6 +269,13 @@ def apply_existing_scaling_v3(prescaled_df, features_df, num_imputer, cat_impute
 def save_scaler_joblib(scaler, save_path: Path = MODELS_DIR / "scaler.pkl"):
     """
     Save the scaler to a file.
+
+    Args:
+        scaler (StandardScaler): Scaler object to save.
+        save_path (Path): Path to save the scaler file.
+    Returns:
+        None
+        This function saves the scaler to the specified path using joblib.
     """
     import joblib
     joblib.dump(scaler, save_path)
@@ -235,7 +288,13 @@ def save_scaler_joblib(scaler, save_path: Path = MODELS_DIR / "scaler.pkl"):
 def load_scaler_joblib(load_path: Path = MODELS_DIR / "scaler.pkl"):  
     """
     Load the scaler from a file.
+
+    Args:
+        load_path (Path): Path to the scaler file.
+    Returns:
+        StandardScaler: Loaded scaler object.
     """
+
     import joblib
     scaler = joblib.load(load_path)
     logger.info(f"Scaler loaded from {load_path}")
@@ -250,6 +309,14 @@ def load_scaler_joblib(load_path: Path = MODELS_DIR / "scaler.pkl"):
 def save_scaler_pickledump(scaler, save_path: Path = MODELS_DIR / "scaler.pkl"):
     """
     Save the scaler to a file.
+
+    Args:
+        scaler (StandardScaler): Scaler object to save.
+        save_path (Path): Path to save the scaler file.
+    
+    Returns:
+        None
+        This function saves the scaler to the specified path using pickle.
     """
     from pickle import dump
     with open(save_path, 'wb') as file:
@@ -263,6 +330,12 @@ def save_scaler_pickledump(scaler, save_path: Path = MODELS_DIR / "scaler.pkl"):
 def load_scaler_pickledump(load_path: Path = MODELS_DIR / "scaler.pkl"):  
     """
     Load the scaler from a file.
+
+    Args:
+        load_path (Path): Path to the scaler file.
+    Returns:
+        StandardScaler: Loaded scaler object.
+    
     """
     import pickle
     

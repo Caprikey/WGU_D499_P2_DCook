@@ -40,7 +40,15 @@ def main(
 
 
 def column_correction_ost_west_kz(dataframe, keep_original = True):
-
+    """
+    Custom function to re-engineer the 'OST_WEST_KZ' feature from a single character code into two binary features:
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the 'OST_WEST_KZ' column.
+        keep_original (bool): If True, keeps the original 'OST_WEST_KZ' column; if False, drops it.
+    Returns:
+        pd.DataFrame: The updated DataFrame with the new binary columns 'OST_WEST_KZ_EAST' and 'OST_WEST_KZ_WEST'.
+    """
     
     # prefill nas
     dataframe['OST_WEST_KZ'] = dataframe['OST_WEST_KZ'].fillna('')
@@ -76,6 +84,14 @@ def column_correction_ost_west_kz(dataframe, keep_original = True):
 
 # Remapping the values to be more consistent in binary encoding
 def column_correction_vers_type(dataframe):
+    """
+    Custom function to re-engineer the 'VERS_TYP' feature from a single number code into two binary features:
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the 'VERS_TYP' column.
+    Returns:
+        pd.DataFrame: The updated DataFrame with the new binary columns 'VERS_TYP_LIFE_INSURANCE' and 'VERS_TYP_PROPERTY_INSURANCE'.
+    """
 
     dataframe['VERS_TYP'] = dataframe['VERS_TYP'].replace({1: 0, 2: 1})
     
@@ -91,6 +107,15 @@ def column_correction_vers_type(dataframe):
 # Remapping the values to be more consistent in binary encoding
 def column_correction_anrede_kz(dataframe):
 
+    """
+    Custom function to re-engineer the 'ANREDE_KZ' feature from a single number code into two binary features:
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the 'ANREDE_KZ' column.
+    Returns:
+        pd.DataFrame: The updated DataFrame with the 'ANREDE_KZ' column remapped.
+    """
+
     dataframe['ANREDE_KZ'] = dataframe['ANREDE_KZ'].replace({1: 0, 2: 1})
     
     return dataframe
@@ -102,6 +127,14 @@ def column_correction_anrede_kz(dataframe):
 
 
 def column_correction_cameo_deu_2015(dataframe):
+    """
+    Custom function to re-engineer the 'CAMEO_DEU_2015' feature from a two-character code into a single character code.
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the 'CAMEO_DEU_2015' column.
+    Returns:
+        pd.DataFrame: The updated DataFrame with the 'CAMEO_DEU_2015' column remapped.
+    """
 
     # Removing first character
     def check_value_cameo_deu_2015(value):
@@ -177,6 +210,22 @@ def feature_mapping(
     keep_index=True, 
     keep_original=True
 ):
+
+    """
+    Maps values in specified columns of a DataFrame using provided dictionaries and optionally creates new columns.
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame to be modified.
+        original_column_names (str or list): The name(s) of the column(s) to be mapped.
+        map_dictionary_list (list of dicts): A list of dictionaries for mapping values in the original columns.
+        new_columns_list (list of str, optional): A list of new column names to be created. Required if create_new is True.
+        map_values (bool): If True, maps values using the provided dictionaries. Defaults to True.
+        create_new (bool): If True, creates new columns with mapped values. Defaults to True.
+        keep_index (bool): If True, keeps the index of the original DataFrame when creating new columns. Defaults to True.
+        keep_original (bool): If True, keeps the original columns in the DataFrame. Defaults to True.
+    Returns:
+        pd.DataFrame: The updated DataFrame with the mapped columns.
+    """
 
     # Normalize to list if single column is passed
     if isinstance(original_column_names, str):
@@ -254,6 +303,17 @@ def feature_mapping(
 
 
 def column_encode_multi_category_to_single_onehot(dataframe, column_name, drop_first_flag = False, drop_original=True):
+    """
+    Custom function to one-hot encode a categorical column in a DataFrame.
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the column to be one-hot encoded.
+        column_name (str): The name of the column to be one-hot encoded.
+        drop_first_flag (bool): If True, drops the first category to avoid multicollinearity. Defaults to False.
+        drop_original (bool): If True, drops the original column after encoding. Defaults to True.
+    Returns:
+        pd.DataFrame: The updated DataFrame with one-hot encoded columns.
+    """
 
     if dataframe[column_name].dtype != 'category':
         dataframe[column_name] = dataframe[column_name].astype('category')
@@ -283,12 +343,12 @@ def column_reengineering_pragende_jugendjahre(dataframe, one_hot_encode=False, k
     3. Insert these new columns directly after the original column's position
     4. Drop the original column.
 
-    Parameters:
-    dataframe (pd.DataFrame): The DataFrame containing the 'PRAEGENDE_JUGENDJAHRE' column.
-    one_hot_encode (bool): If True, returns one-hot encoded columns instead of raw digits.
-    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the 'PRAEGENDE_JUGENDJAHRE' column.
+        one_hot_encode (bool): If True, returns one-hot encoded columns instead of raw digits.
+        keep_original (bool): If true, original column is kept; If false, it is deleted.
     Returns:
-    pd.DataFrame: The updated DataFrame with the new columns.
+        pd.DataFrame: The updated DataFrame with the new columns.
     """
 
     # Dictionary
@@ -355,12 +415,13 @@ def column_reengineering_cameo_intl_2015(dataframe, one_hot_encode=False, keep_o
     3. Insert these new columns directly after the original column's position.
     4. Drop the original column.
 
-    Parameters:
-    dataframe (pd.DataFrame): The DataFrame containing the 'CAMEO_INTL_2015' column.
-    one_hot_encode (bool): If True, returns one-hot encoded columns instead of raw digits.
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the 'CAMEO_INTL_2015' column.
+        one_hot_encode (bool): If True, returns one-hot encoded columns instead of raw digits.
+        keep_original (bool): If true, original column is kept; If false, it is deleted.
     
     Returns:
-    pd.DataFrame: The updated DataFrame with the new columns.
+        pd.DataFrame: The updated DataFrame with the new columns.
     """
 
     # convert the coumn to string format
@@ -421,13 +482,13 @@ def column_reengineering_lp_lebenshase(dataframe, one_hot_encode=False, keep_ori
     3. Insert these new columns directly after the original column's position
     4. Drop the original column.
 
-    Parameters:
-    dataframe (pd.DataFrame): The DataFrame containing the 'LP_LEBENSPHASE_FEIN' column.
-    one_hot_encode (bool): If True, returns one-hot encoded columns instead of raw digits.
-    keep_original (bool): If true, original column is kept; If false, it is deleted. 
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the 'LP_LEBENSPHASE_FEIN' column.
+        one_hot_encode (bool): If True, returns one-hot encoded columns instead of raw digits.
+        keep_original (bool): If true, original column is kept; If false, it is deleted. 
     
     Returns:
-    pd.DataFrame: The updated DataFrame with the new columns.
+        pd.DataFrame: The updated DataFrame with the new columns.
     """
 
     # Replacement Dictionary Maps
@@ -513,7 +574,15 @@ def column_reengineering_lp_lebenshase(dataframe, one_hot_encode=False, keep_ori
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def column_reengineering_wohnlage(dataframe, keep_original = True):
-
+    """
+    Custom function to re-engineer the 'WOHNLAGE' feature from a single number code into two binary features:
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the 'WOHNLAGE' column.
+        keep_original (bool): If true, original column is kept; If false, it is deleted.
+    Returns:
+        pd.DataFrame: The updated DataFrame with the new columns 'WOHNLAGE_RURAL' and 'WOHNLAGE_NEIGHBOURHOOD'.
+    """
     rural_mapping = {1:0, 2:0, 3:0, 4:0, 5:0, 7:1, 8:1}
     neighbourhood_mapping = {1:1, 2:1, 3:1, 4:1, 5:1, 7:0, 8:0}
 
@@ -576,6 +645,41 @@ def column_reengineering_plz8_family_business_building_flag(dataframe, keep_orig
 
 
 class FeatureTransformer:
+
+    """
+    A class to perform various feature transformations on a pandas DataFrame.   
+    It supports mapping, replacing, and converting data types of columns, as well as encoding new mapped columns.
+    The transformations can be applied in a safe manner, skipping operations on columns that do not exist in the DataFrame.
+    The class can be initialized with a list of operations, each defined by a type and parameters.
+    Operations can include:
+    - 'map': Maps values in a column using a dictionary or list of dictionaries.
+    - 'replace': Replaces values in a column using a dictionary.
+    - 'convert_data_type': Converts the data type of a column to a specified type.
+    - 'encode_new_map_columns': Encodes newly created mapped columns into one-hot encoded format.
+
+    Attributes:
+        operations (list): A list of operations to be performed on the DataFrame.
+        skipped_columns (list): A list of columns that were skipped during the transformation due to non
+        existence in the DataFrame.
+        operations (list): A list of operations to be performed on the DataFrame.
+    Methods:
+        map_column(dataframe, column, mappings, pre_fill_na, create_new, fill_na
+        value=None, new_names=None, keep_index=False, keep_original=True, encode_column=False):
+            Maps values in a specified column of the DataFrame using provided mappings.
+        replace_column(dataframe, column, replacements):
+            Replaces values in a specified column of the DataFrame using provided replacements.
+        convert_data_type(dataframe, column, data_type):
+            Converts the data type of a specified column in the DataFrame to the given data type.
+        encode_new_map_columns(dataframe, column_name_list, drop_first_flag=False, drop_original=True):
+            Encodes newly created mapped columns into one-hot encoded format.
+        transform(dataframe):
+            Applies a series of transformations defined in the operations list to the DataFrame.
+        transform_safe(dataframe):
+            Applies transformations to the DataFrame, skipping operations on columns that do not exist.
+            If a column does not exist, it is skipped and added to the skipped_columns list.    
+
+    
+    """
 
     def __init__(self, operations=None):
         self.operations = operations or []

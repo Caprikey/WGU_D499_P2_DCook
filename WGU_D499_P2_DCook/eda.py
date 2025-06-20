@@ -40,6 +40,9 @@ def column_nan_eda_total_and_percentage(dataframe):
     
     Args:
         dataframe (pd.DataFrame): The DataFrame to analyze.
+    Returns:
+        column_nan_eda_total_series: A series with the total number of NaN values per column.
+        column_nan_eda_percentage_series: A series with the percentage of NaN values per column.
 
     References:
     - https://stackoverflow.com/questions/72083258/how-to-plot-distribution-of-missing-values-in-a-dataframe
@@ -84,6 +87,20 @@ invalid_level = []
 
 # Version 2 of the function
 def eda_identify_outlier_columns(dataframe, features_summary_dataframe, use_threshold=False, threshold=.2, severity_levels_to_flag = None):
+    """
+    Identifies outlier columns based on the percentage of missing values and categorizes them into severity levels.
+    
+    Args:
+        - dataframe (pd.DataFrame): The DataFrame to analyze for missing values.
+        - features_summary_dataframe (pd.DataFrame): A DataFrame containing feature summaries, including 'attribute' and 'information_level'.
+        - use_threshold (bool): If True, uses a fixed threshold for missing score to identify outlier columns.
+        - threshold (float): The threshold value for missing score to identify outlier columns. Default is 0.2 (20%).
+        - severity_levels_to_flag (list): A list of severity levels to flag as outliers. If None, defaults to ['Medium High', 'High', 'Very High'].
+    Returns:
+        - column_nan_eda_df (pd.DataFrame): A DataFrame containing the missing score, severity level, and other statistics for each column.
+        - outlier_column_name_list (list): A list of column names that are considered out
+    """
+
 
     VALID_SEVERITY_LEVELS = [
         'Very Low', 'Low', 'Medium Low', 'Medium',
@@ -187,6 +204,15 @@ def get_invalid_level_eda_identify_outlier_columns():
 
 
 def eda_identify_row_nan(dataframe):
+    """
+    Analyzes the DataFrame for missing values per row and calculates the mean and sum of NaN values per row.
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame to analyze for missing values.
+    Returns:
+        nan_row_dataframe (pd.DataFrame): A DataFrame with additional columns for the mean and sum of NaN values per row.
+        original_dataframe_len (int): The original length of the input DataFrame before any modifications.
+    """
 
     nan_row_dataframe = dataframe.copy()
 
@@ -215,7 +241,19 @@ from sklearn.cluster import KMeans
 import numpy as np
 
 def eda_row_nan_find_dynamic_nan_threshold(dataframe, num_clusters = 3, num_init = 'auto', rand_stat = 5654):
+    """
+    Finds a dynamic threshold for NaN values per row using KMeans clustering.
     
+    Args:
+        - dataframe (pd.DataFrame): The DataFrame to analyze for NaN values.
+        - num_clusters (int): The number of clusters to use in KMeans clustering. Default is 3.
+        - num_init (int or str): The number of times the KMeans algorithm will be run with different centroid seeds. Default is 'auto'.
+        - rand_stat (int): Random state for reproducibility. Default is 5654.
+
+    Returns:
+        threshold (float): The dynamic threshold for NaN values per row, calculated using KMeans clustering.
+    """
+
     nan_row_dataframe = dataframe.isna().mean(axis=1)
     
     nan_row_data = nan_row_dataframe.values.reshape(-1, 1)
@@ -248,6 +286,28 @@ def eda_row_nan_divide_by_threshold(dataframe,
                                     plot_graph=False
                                     ):
     
+    """
+    Divides rows in a DataFrame into low and high NaN categories based on a dynamic threshold.
+    
+    Args:
+        - dataframe (pd.DataFrame): The DataFrame to analyze for NaN values.
+        - max_loss_allowed (float): The maximum percentage of rows that can be lost due to NaN values. Default is 0.20 (20%).
+        - max_nan_per_row (float): The maximum percentage of NaN values allowed per row. Default is 0.30 (30%).
+        - method (str): The method to use for determining the NaN threshold. Options are 'kmeans' or 'default'. Default is 'kmeans'.
+        - return_common_columns (bool): Whether to return common columns with low NaN values. Default is True.
+        - allow_noise (bool): Whether to allow noise in column matching. Default is False.
+        - noise_threshold (float): The threshold for noise in column matching. Default is 0.05 (5%).
+        - plot_graph (bool): Whether to plot graphs comparing NaN distributions. Default is False.
+    Returns:
+        - eda_low_row_nan_df (pd.DataFrame): DataFrame with low NaN rows.
+        - eda_high_row_nan_df (pd.DataFrame): DataFrame with high NaN rows
+        - eda_row_nan_common_columns (list): List of common columns with low NaN values.
+        - threshold_source (str): Source of the threshold used ('kmeans' or 'quantile_fallback').
+        - threshold (float): The threshold value used for dividing rows based on NaN values.
+        - Optionally plots graphs comparing NaN distributions if plot_graph is True.
+        - Optionally returns common columns with low NaN values if return_common_columns is True.
+    """
+        
     eda_row_nan_dataframe = dataframe.isna().mean(axis=1)
 
     # 1. Try dynamic threshold from KMeans
@@ -400,6 +460,15 @@ from scipy.stats import chi2_contingency
 import pandas as pd
 
 def chi2_comparisons(summary_dict):
+    """
+    Performs Chi-squared tests on the provided summary dictionary, which contains counts for 'low_subset' and 'high_subset' for each column.
+    
+    Args:
+        summary_dict (dict): A dictionary where keys are column names and values are DataFrames containing counts for 'low_subset' and 'high_subset'.
+    Returns:
+        - pd.DataFrame: A DataFrame containing chi-squared statistics and p-values for each column.
+    """
+
     chi2_results = {}
 
     for col, dataframe in summary_dict.items():
@@ -415,6 +484,14 @@ def chi2_comparisons(summary_dict):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def calculate_proportion_diff(summary_dict):
+    """
+    Calculates the percentage difference between two subsets ('low_subset' and 'high_subset') for each column in the provided summary dictionary.
+    
+    Args:
+        - summary_dict (dict): A dictionary where keys are column names and values are DataFrames containing counts for 'low_subset' and 'high_subset'.
+    Returns:
+        - diff_dict: A dictionary where keys are column names and values are DataFrames with additional columns for low/high percentages and absolute percentage difference.
+    """
 
     diff_dict = {}
     
@@ -438,7 +515,18 @@ def calculate_proportion_diff(summary_dict):
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
+
 def print_proportion_diff(diff_dict, top_n=5):
+    """
+    Prints the top N rows with the largest percentage difference for each column in the provided dictionary.
+    
+    Args:
+        - diff_dict (dict): A dictionary where keys are column names and values are DataFrames with low/high percentages and absolute percentage difference.
+        - top_n (int): Number of top rows to display for each column based on percentage difference. Default is 5.
+    Returns:
+        - None: This function prints the top N rows with the largest percentage difference for each column.
+    """
+
     for column, dataframe in diff_dict.items():
         
         print(f"\n=== Column: {column} ===")
@@ -456,6 +544,17 @@ def print_proportion_diff(diff_dict, top_n=5):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def combine_proportion_diff_to_dataframe(diff_dict, top_n=None):
+
+    """
+    Combines the results of proportion differences from multiple columns into a single DataFrame.
+    
+    Args:
+        - diff_dict (dict): A dictionary where keys are column names and values are DataFrames with low/high percentages and absolute percentage difference.
+        - top_n (int, optional): If specified, limits the number of rows per column to the top N based on percentage difference. Default is None, which includes all rows.
+    Returns:
+        - pd.DataFrame: A DataFrame containing the combined results from all columns, including column names, values, low/high subsets, percentages, and percentage differences.
+    """
+
     import pandas as pd
 
     combined_rows = []
@@ -495,6 +594,21 @@ multi_set = set()
 error_set = set()
 
 def eda_column_identify_binary_multilevel_category(dataframe, column_list, binary_set, multi_set, error_set):
+    """
+    Identifies binary and multi-level categorical columns in a DataFrame based on the number of unique values in each column.
+    
+    Args:
+        - dataframe (pd.DataFrame): The DataFrame to analyze. 
+        - column_list (pd.DataFrame): A DataFrame containing the columns to check, with a column named 'attribute'.
+        - binary_set (set): A set to store columns identified as binary (2 unique values).
+        - multi_set (set): A set to store columns identified as multi-level (more than 2 unique values).
+        - error_set (set): A set to store columns that do not meet the criteria for binary or multi-level.
+
+    Returns:
+        - binary_set (set): Set of columns identified as binary (2 unique values).
+        - multi_set (set): Set of columns identified as multi-level (more than 2 unique values).
+        - error_set (set): Set of columns that do not meet the criteria for binary or multi-level.
+    """
 
     for index, row in column_list.iterrows():
         column = row['attribute']
@@ -517,6 +631,16 @@ def eda_column_identify_binary_multilevel_category(dataframe, column_list, binar
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def eda_get_missing_percentages(prescaled_dataframe, features_dataframe):
+    """
+    Calculates the percentage of missing values for each column in the DataFrame and returns a DataFrame with the results.
+    
+    Args:
+        - prescaled_dataframe (pd.DataFrame): The DataFrame to analyze for missing values.
+        - features_dataframe (pd.DataFrame): A DataFrame containing feature summaries, including 'attribute', 'type', and 'information_level'.
+    Returns:
+        - missing_data_dataframe (pd.DataFrame): A DataFrame containing the column names, missing percentages, total missing values, data types, and information levels.
+    """
+
 
     get_percentages = (prescaled_dataframe.isnull().sum(axis=0) / prescaled_dataframe.shape[0]).sort_values(ascending=False)
 

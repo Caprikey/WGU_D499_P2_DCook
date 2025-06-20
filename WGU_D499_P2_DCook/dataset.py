@@ -43,6 +43,14 @@ input_folder_path = RAW_DATA_DIR
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def load_csv(filename) -> pd.DataFrame:
+    """
+    Loads a CSV file from the input folder path.
+    
+    Args:
+        filename (str): The name of the CSV file to load from the input folder path.
+    Returns:
+        pd.DataFrame: A pandas DataFrame containing the loaded CSV data.
+    """
 
     import pandas as pd
 
@@ -58,6 +66,15 @@ def load_csv(filename) -> pd.DataFrame:
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def load_csv_with_parameters(filename, **kwargs) -> pd.DataFrame:
+    """
+    Loads a CSV file from the input folder path with additional parameters.
+    
+    Args:
+        filename (str): The name of the CSV file to load from the input folder path.
+        **kwargs: Additional keyword arguments to pass to `pd.read_csv`.
+    Returns:
+        pd.DataFrame: A pandas DataFrame containing the loaded CSV data.
+    """
 
     import pandas as pd
         
@@ -76,7 +93,16 @@ def load_csv_with_parameters(filename, **kwargs) -> pd.DataFrame:
 
 
 def write_checkpoints(save_path, save_name, dataframe):
-
+    """
+    Saves a DataFrame to CSV and Pickle files at the specified path.
+    
+    Args:
+        save_path (str): The path where the DataFrame should be saved. Options include 'raw_data', 'processed_data', 'interim_data', 'external_data', or 'archived_data'.
+        save_name (str): The name of the file to save the DataFrame as.
+        dataframe (pd.DataFrame): The DataFrame to be saved.
+    Returns:
+        None, this outputs the DataFrame to CSV and Pickle files at the specified path.
+    """
     #print(save_path)
     #print(save_name)
     #print(dataframe)

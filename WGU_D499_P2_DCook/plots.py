@@ -50,6 +50,9 @@ def plot_hist_column_nan_percentage(column_nan_eda_percentage_dataframe):
     
     Args:
         dataframe (pd.DataFrame): The DataFrame to analyze.
+
+    returns:
+        None: Displays a histogram of the percentage of NaN values per column.
     """
     import pandas as pd
     import numpy as np
@@ -87,6 +90,8 @@ def plot_bar_column_nan_percentage(dataframe):
     
     Args:
         dataframe (pd.DataFrame): The DataFrame to analyze.
+    returns:
+        None: Displays a bar chart of the percentage of NaN values per column.
     """
     import pandas as pd
     import matplotlib.pyplot as plt
@@ -123,6 +128,16 @@ def plot_bar_column_nan_percentage(dataframe):
 
 
 def plot_bar_eda_column_missing_severity(dataframe, top_n=30):
+    """
+    Plots a bar chart of the top N columns with the highest percentage of missing values, categorized by severity level.
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing columns 'column_name', 'nan_percentage', 'severity_level', and 'missing_score'.
+        top_n (int): The number of top columns to display in the plot. Default is 30.
+    Returns:
+        None: Displays a bar chart of the top N columns with the highest percentage of missing values.
+    """
+
     
     # Sort and truncate
     sorted_df = dataframe.sort_values(by='missing_score', ascending=False).head(top_n)
@@ -177,6 +192,15 @@ def plot_bar_eda_column_missing_severity(dataframe, top_n=30):
 
 
 def plot_hist_row_nan_eda(nan_row_eda_dataframe):
+    """
+    Plots histograms for the average and total count of missing values per row in a DataFrame.
+    
+    Args:
+        nan_row_eda_dataframe (pd.DataFrame): DataFrame containing row-wise NaN statistics with columns 'row_nan_total_mean' and 'row_nan_total_sum'.
+    Returns:
+        None: Displays two histograms - one for the average missing values per row and another for the total count of missing values per row.
+    """
+
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -234,6 +258,11 @@ import numpy as np
 def plot_nan_proportion_histogram(mean_values):
     """
     Plot histogram of the proportion of missing values per row.
+
+    Args:
+        mean_values (pd.Series): Series containing the mean proportion of missing values per row.
+    Returns:
+        None: Displays a histogram of the proportion of missing values per row.
     """
     fig, ax = plt.subplots(figsize=(6, 4))
 
@@ -256,6 +285,12 @@ def plot_nan_proportion_histogram(mean_values):
 def plot_nan_count_histogram(sum_values):
     """
     Plot histogram of the count of missing values per row.
+
+    Args:
+        sum_values (pd.Series): Series containing the total count of missing values per row.
+    Returns:
+        None: Displays a histogram of the count of missing values per row.
+
     """
     fig, ax = plt.subplots(figsize=(6, 4))
 
@@ -278,6 +313,11 @@ def plot_nan_count_histogram(sum_values):
 def plot_hist_row_nan_eda_v2(nan_row_eda_dataframe):
     """
     Wrapper function to call both histogram plotters.
+
+    Args:
+        nan_row_eda_dataframe (pd.DataFrame): DataFrame containing row-wise NaN statistics with columns 'row_nan_total_mean' and 'row_nan_total_sum'.
+    returns:
+        None: Displays two histograms - one for the average missing values per row and another for the total count of missing values per row.
     """
     print("✅ Plotting histograms for missing values per row...")
     plot_nan_proportion_histogram(nan_row_eda_dataframe['row_nan_total_mean'])
@@ -293,6 +333,14 @@ import numpy as np
 def plot_nan_proportion_histogram_side_by_side(ax, mean_values):
     """
     Plot histogram of the proportion of missing values per row in a side-by-side manner.
+
+    args:
+        ax (matplotlib.axes.Axes): The axes on which to plot the histogram.
+        mean_values (pd.Series): Series containing the mean proportion of missing values per row.
+
+    returns: 
+        None: Displays a histogram of the proportion of missing values per row on the provided axes.
+
     """
 
     mean_bins = np.linspace(mean_values.min(), mean_values.max(), 30)
@@ -325,6 +373,11 @@ def plot_nan_count_histogram_side_by_side(ax, sum_values):
 def plot_hist_row_nan_eda_side_by_side(nan_row_eda_dataframe):
     """
     Wrapper function to call both histogram plotters side by side
+
+    args: 
+        nan_row_eda_dataframe (pd.DataFrame): DataFrame containing row-wise NaN statistics with columns 'row_nan_total_mean' and 'row_nan_total_sum'.
+    returns:
+        None: Displays two histograms side by side - one for the average missing values per row and another for the total count of missing values per row.
     """
     print("✅ Plotting histograms for missing values per row...")
     # This was replaced with the plot_nan_proportion_histogram_side_by_side and plot_nan_count_histogram_side_by_side functions above
@@ -357,6 +410,18 @@ def plot_hist_row_nan_eda_side_by_side(nan_row_eda_dataframe):
 # This one is called from in a loop on the notebook.
 
 def plot_countplout_compare_row_nan_distribution_per_column(dataframe_low, dataframe_high, column_name):
+
+    """
+    Plots a countplot comparing the distribution of a specified column in two DataFrames (low and high subsets).
+    
+    Args:
+        dataframe_low (pd.DataFrame): DataFrame representing the low subset.
+        dataframe_high (pd.DataFrame): DataFrame representing the high subset.
+        column_name (str): The name of the column to compare in both DataFrames.
+    Returns:
+        None: Displays a countplot comparing the distribution of the specified column in both DataFrames.
+    """
+        
     #figure_size = (14, 3)
     #figure_size = (12, 3)
     figure_size = (12, 4)
@@ -403,6 +468,18 @@ def plot_countplout_compare_row_nan_distribution_per_column(dataframe_low, dataf
 # This one is called from the eda_row_nan_divide_by_threshold in the eda.py file
 
 def plot_countplot_compare_row_nan_dist_per_column(dataframe_low, dataframe_high, column_name):
+
+    """
+    Plots a countplot comparing the distribution of a specified column in two DataFrames (low and high subsets).
+    This one is called from the eda_row_nan_divide_by_threshold in the eda.py file
+    
+    Args:
+        dataframe_low (pd.DataFrame): DataFrame representing the low subset.
+        dataframe_high (pd.DataFrame): DataFrame representing the high subset.
+        column_name (str): The name of the column to compare in both DataFrames.
+    Returns:
+        None: Displays a countplot comparing the distribution of the specified column in both DataFrames.
+    """
     #figure_size = (14, 3)
     #figure_size = (12, 3)
     figure_size = (12, 4)
@@ -450,6 +527,17 @@ def plot_countplot_compare_row_nan_dist_per_column(dataframe_low, dataframe_high
 # Not using
 
 def plot_barplot_compare_row_nan_dist_per_column_percentage(dataframe_low, dataframe_high, column_name):
+    """
+    Plots a bar plot comparing the percentage distribution of a specified column in two DataFrames (low and high subsets).
+    
+    Args:
+        dataframe_low (pd.DataFrame): DataFrame representing the low subset.
+        dataframe_high (pd.DataFrame): DataFrame representing the high subset.
+        column_name (str): The name of the column to compare in both DataFrames.
+    Returns:
+        None: Displays a bar plot comparing the percentage distribution of the specified column in both DataFrames.
+    """
+
     figure_size = (10, 2.5)
     fig, axes = plt.subplots(1, 2, figsize=figure_size)
 
@@ -494,10 +582,10 @@ def scree_plot(pca):
     '''
     Creates a scree plot associated with the principal components 
     
-    INPUT: pca - the result of instantian of PCA in scikit learn
-            
-    OUTPUT:
-            None
+    args:
+        pca (sklearn.decomposition.PCA): The PCA object after fitting to the data.
+    returns:
+        None: Displays a scree plot showing the explained variance ratio for each principal component.
     '''
     num_components=len(pca.explained_variance_ratio_)
     ind = np.arange(num_components)
@@ -534,10 +622,11 @@ def scree_plot_v2(pca):
     '''
     Creates a scree plot associated with the principal components 
     
-    INPUT: pca - the result of instantian of PCA in scikit learn
+    args: 
+        pca - the result of instantian of PCA in scikit learn
             
-    OUTPUT:
-            None
+    returns:
+        None: Displays a scree plot showing the explained variance ratio for each principal component.
     '''
     num_components=len(pca.explained_variance_ratio_)
     ind = np.arange(num_components)
@@ -579,12 +668,16 @@ def plot_pca_heatmap(pca, feature_names, num_components=5, figsize=(14,8), cmap=
     """
     Plots a heatmap showing feature weights across PCA components.
 
-    Parameters:
+    args:
     - pca: fitted PCA object from sklearn
     - feature_names: list of feature names (columns after preprocessing)
     - num_components: number of PCA components to plot
     - figsize: size of the heatmap
     - cmap: colormap for heatmap
+
+    returns:
+    - None: Displays a heatmap of PCA components with feature weights.
+
     """
     # Get the PCA component matrix (shape: n_components x n_features)
     components = pca.components_[:num_components]
@@ -618,6 +711,16 @@ def plot_pca_heatmap(pca, feature_names, num_components=5, figsize=(14,8), cmap=
 
 
 def plot_kmeans_elbow_method(model_score, clusters_range=(2, 30), step_interval=2):
+    """
+    Plots the elbow method for KMeans clustering to determine the optimal number of clusters.
+
+    Args:
+        model_score (list): List of average distances for each number of clusters.
+        clusters_range (tuple): Range of clusters to consider (start, end).
+        step_interval (int): Step interval for the clusters in the range.
+    Returns:
+        None: Displays a plot showing the average distance for each number of clusters.
+    """
 
     start, end = clusters_range
     
@@ -641,7 +744,16 @@ def plot_kmeans_elbow_method(model_score, clusters_range=(2, 30), step_interval=
 
 
 def plot_elbow(model_score, clusters_range):
+    """
+    Plots the elbow method for KMeans clustering to determine the optimal number of clusters.
     
+    Args:
+        model_score (list): List of sum of squared distances for each number of clusters.
+        clusters_range (list): List of cluster numbers corresponding to the model scores.
+    Returns:
+        None: Displays a plot showing the sum of squared distances for each number of clusters.
+    """
+
     fig = plt.figure(figsize=(12,6))
     ax = fig.add_subplot(111)
     
@@ -661,6 +773,16 @@ def plot_elbow(model_score, clusters_range):
 
 
 def plot_elbow_with_knee_locator(model_scores, cluster_range, optimal_k):
+    """
+    Plots the elbow method for KMeans clustering using KneeLocator to determine the optimal number of clusters.
+    
+    Args:
+        model_scores (list): List of average within-cluster distances for each number of clusters.
+        cluster_range (list): List of cluster numbers corresponding to the model scores.
+        optimal_k (int): The optimal number of clusters determined by the KneeLocator.
+    Returns:
+        None: Displays a plot showing the average within-cluster distance and the optimal number of clusters.
+    """
 
     plt.figure(figsize=(10, 6))
     plt.plot(cluster_range, model_scores, marker='o', label='Average Within-Cluster Distance')
@@ -686,6 +808,19 @@ def plot_elbow_with_knee_locator(model_scores, cluster_range, optimal_k):
 
 
 def plot_combined_cluster_distribution(cluster_info_dataframe, title_suffix="", save_as="plot_combined_cluster_distribution.png"):
+    """
+    Plots a bar plot comparing the proportions of clusters in the population and customers datasets.
+    
+    Args:
+        cluster_info_dataframe (pd.DataFrame): DataFrame containing cluster information with columns 'Cluster', 'Population', and 'Customers'.
+        title_suffix (str): Suffix to add to the plot title for context.
+        save_as (str): Filename to save the plot as.
+    Returns:
+        None: Displays a bar plot comparing the proportions of clusters in the population and customers datasets.
+            This function will save the plot to the FIGURES_DIR directory with the specified filename.
+
+    """
+
     import pandas as pd
     import matplotlib.pyplot as plt
     import seaborn as sns
@@ -711,6 +846,20 @@ def plot_combined_cluster_distribution(cluster_info_dataframe, title_suffix="", 
 
 
 def plot_combined_cluster_distribution_v2(cluster_info_dataframe_melted, target_dataset = None, baseline_dataset = None, save_as="plot_combined_cluster_distribution_v2.png"):
+    """
+    Plots a bar plot comparing the proportions of clusters in the target and baseline datasets.
+
+    Args:
+        cluster_info_dataframe_melted (pd.DataFrame): Melted DataFrame containing cluster information with columns 'Cluster', 'Dataset', and 'Proportion'.
+        target_dataset (str): The dataset to compare against the baseline dataset.
+        baseline_dataset (str): The baseline dataset for comparison.
+        save_as (str): Filename to save the plot as.
+
+    Returns:
+        None: Displays a bar plot comparing the proportions of clusters in the target and baseline datasets.
+            This function will save the plot to the FIGURES_DIR directory with the specified filename.
+    """ 
+
     import pandas as pd
     import matplotlib.pyplot as plt
     import seaborn as sns
@@ -741,8 +890,11 @@ def plot_difference_of_proportions(cluster_info_dataframe, target_dataset=None, 
     Plots the difference of proportions of clusters between customers and population.
 
     Args:
-        cluster_info_dataframe (pd.DataFrame): DataFrame containing cluster information with columns 'Cluster',
-        
+        cluster_info_dataframe (pd.DataFrame): DataFrame containing cluster information with columns 'dataset', 'compared_to', 'cluster', and 'proportion'.
+        target_dataset (str): The dataset to compare against the baseline dataset.
+        baseline_dataset (str): The baseline dataset for comparison.
+    Returns:
+        None: Displays a bar plot showing the difference in proportions
     """
     
     import pandas as pd

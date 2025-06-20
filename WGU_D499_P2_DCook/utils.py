@@ -39,6 +39,20 @@ def main(
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def get_info_to_dataframe(dataframe):
+
+    """
+    Generates a DataFrame containing information about each column in the input DataFrame.
+    
+    Args:
+        dataframe (pd.DataFrame): The input DataFrame for which column information is to be generated.
+    Returns:
+        pd.DataFrame: A DataFrame containing the following columns:
+            - 'Column': The name of each column in the input DataFrame.
+            - 'Non-Null Count': The count of non-null values in each column.
+            - 'Null Count': The count of null values in each column.
+            - 'Dtype': The data type of each column.   
+    """
+        
     column_info_dataframe = pd.DataFrame({
         "Column": dataframe.columns,
         "Non-Null Count": dataframe.notnull().sum().values,
@@ -53,6 +67,16 @@ def get_info_to_dataframe(dataframe):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def compare_dataframe_info(dataframe1, dataframe2):
+
+    """
+    Compares the column information of two DataFrames and returns a DataFrame containing the comparison.
+    
+    Args:
+        dataframe1 (pd.DataFrame): The first DataFrame to compare.
+        dataframe2 (pd.DataFrame): The second DataFrame to compare.
+    Returns:
+        pd.DataFrame: A DataFrame containing the comparison of column information between two DataFrames.
+    """
     info1 = get_info_to_dataframe(dataframe1)
     info2 = get_info_to_dataframe(dataframe2)
 
@@ -84,6 +108,17 @@ def compare_dataframe_info(dataframe1, dataframe2):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def export_comparison_to_excel(comparison_df, filename="comparison.xlsx"):
+    """
+    Exports the comparison DataFrame to an Excel file with basic formatting.
+    
+    Args:
+        comparison_df (pd.DataFrame): The DataFrame containing the comparison results to export.
+        filename (str): The name of the output Excel file. Defaults to "comparison.xlsx".
+    Returns:
+        None
+        Exports the comparison DataFrame to an Excel file with basic formatting.
+    """
+
     with pd.ExcelWriter(filename, engine="xlsxwriter") as writer:
         comparison_df.to_excel(writer, index=False, sheet_name="Comparison")
 
@@ -104,8 +139,14 @@ fs_string_conversions_failed = []
 
 def convert_string_to_list(row):
     """
-    Helper to safely evaluate stringified lists from the 'missing_or_unknown' column.
+    Converts a string representation of a list in the 'missing_or_unknown' column of a DataFrame row to an actual list.
+    
+    Args:
+        row (pd.Series): A row from a DataFrame containing a column 'missing_or_unknown' which is a string representation of a list.
+    Returns:
+        list: The converted list from the string representation in the 'missing_or_unknown' column.
     """
+
     string_list = row['missing_or_unknown']
     try:
         return ast.literal_eval(string_list)
@@ -117,7 +158,9 @@ def convert_string_to_list(row):
 
 
 def get_fs_string_conversions_failed():
-
+    """
+    Returns a list of tuples containing the attribute name and the string that failed to convert.
+    """
     return fs_string_conversions_failed
 
 
@@ -129,7 +172,17 @@ def get_fs_string_conversions_failed():
 null_dict = {}
 
 def convert_unknown_missing_to_nan(main_df, missing_unknown_df, verbose=False):
-
+    """
+    Quick note: this function is missing a docstring. Here's a simple one you can add to match your project style.
+    
+    Args:
+        main_df (pd.DataFrame): The main DataFrame where missing or unknown values will be replaced with NaN.
+        missing_unknown_df (pd.DataFrame): A DataFrame containing the attributes and their corresponding missing or unknown values.
+        verbose (bool): If True, prints detailed information about the replacement process. Defaults to False.
+    Returns:
+        main_df (pd.DataFrame): The DataFrame with missing or unknown values replaced with NaN.
+        null_dict (dict): A dictionary containing the count of null values before and after the replacement for each column.
+    """
     for index, row in missing_unknown_df.iterrows():
 
         column_name = row['attribute']
@@ -195,6 +248,20 @@ def null_dict_to_dataframe(null_dictionary):
 from IPython.display import display
 
 def display_describe_column_comparison_side_by_side(dataframe, column_name_1, column_name_2, dc1_name=None, dc2_name=None):
+
+    """
+    Displays the descriptive statistics of two columns side by side in a DataFrame format.
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the columns to be compared.
+        column_name_1 (str): The name of the first column to describe.
+        column_name_2 (str): The name of the second column to describe.
+        dc1_name (str, optional): Custom name for the first column's description. Defaults to None.
+        dc2_name (str, optional): Custom name for the second column's description. Defaults to None.
+    Returns:
+        None: This function displays the descriptive statistics of the two columns side by side.
+    """
+        
     describe_column_1 = dataframe[column_name_1].describe()
     describe_column_2 = dataframe[column_name_2].describe()
 
@@ -214,6 +281,14 @@ def display_describe_column_comparison_side_by_side(dataframe, column_name_1, co
 
 
 def check_and_remove_row_nan_columns(dataframe):
+    """
+    Checks for and removes temporary columns related to row NaN values from the input DataFrame.
+    
+    Args:
+        dataframe (pd.DataFrame): The input DataFrame from which temporary columns are to be removed.
+    Returns:
+        pd.DataFrame: The input DataFrame with temporary columns removed.
+    """
 
     temp_columns_double_check = ['row_nan_total_mean', 'row_nan_category']
 
@@ -233,6 +308,20 @@ def check_and_remove_row_nan_columns(dataframe):
 
 
 def get_feature_types_and_count(summary_dataframe):
+    """
+    Analyzes the 'type' column in the summary DataFrame to categorize features and count their occurrences.
+    
+    Args:
+        summary_dataframe (pd.DataFrame): A DataFrame containing a 'type' column that categorizes features.
+    Returns:
+        feature_counts (pd.DataFrame): A DataFrame containing the count of each feature type.
+        interval_columns (pd.DataFrame): A DataFrame containing columns of type 'interval'. 
+        numeric_columns (pd.DataFrame): A DataFrame containing columns of type 'numeric'.
+        ordinal_columns (pd.DataFrame): A DataFrame containing columns of type 'ordinal'.
+        categorical_columns (pd.DataFrame): A DataFrame containing columns of type 'categorical'.
+        mixed_columns (pd.DataFrame): A DataFrame containing columns of type 'mixed'.
+
+    """
 
     feature_counts = summary_dataframe['type'].value_counts().reset_index().rename(columns={"index": "feature_type", 0: "count"})
 
@@ -279,6 +368,15 @@ def get_feature_types_and_count(summary_dataframe):
 # Check value types are ints or floats:
 
 def column_dtype_check(dataframe, column_list):
+    """
+    Checks the data types of specified columns in a DataFrame and prints whether they are approved types (int or float).S
+    
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing the columns to be checked.
+        column_list (list): A list of column names to check the data types against approved types (int or float).
+    Returns:
+        None: This function prints the data types of specified columns in the DataFrame and checks if they are approved types (int or float).
+    """
     print("Running column_dtype_check...")
     
     approved_types = ['int', 'float']
@@ -297,6 +395,14 @@ def column_dtype_check(dataframe, column_list):
 
 
 def convert_column_names_to_uppercase(dataframe):
+    """
+    Converts all column names in the input DataFrame to uppercase.
+    
+    Args:
+        dataframe (pd.DataFrame): The input DataFrame whose column names are to be converted to uppercase.
+    Returns:r
+        pd.DataFrame: The input DataFrame with all column names converted to uppercase.
+    """
 
     uppercase_columns_names = []
 
@@ -313,6 +419,17 @@ def convert_column_names_to_uppercase(dataframe):
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 
 def get_imput_lists(dataframe):
+
+    """
+    Generates lists of columns that require imputation based on their data types.    
+
+    Args:
+        dataframe (pd.DataFrame): The input DataFrame containing a 'data_type' column that categorizes columns by their data types.
+    Returns:
+        - category_imputed_columns_list: List of columns with 'ordinal' or 'categorical' data types that require imputation.
+        - numeric_imputed_columns_list: List of columns with 'numeric' data type that require imputation.
+        - imputed_columns_list: Combined list of all columns that require imputation (both category and numeric).
+    """
 
     category_imputed_data_type = ['ordinal', 'categorical']
 
@@ -332,6 +449,15 @@ def get_imput_lists(dataframe):
 
 
 def find_differences_between_columns(dataframe_one, dataframe_two):
+    """
+    Compares the columns of two DataFrames and returns a list of column names that are present in one DataFrame but not in the other.
+    
+    Args:
+        dataframe_one (pd.DataFrame): The first DataFrame to compare.
+        dataframe_two (pd.DataFrame): The second DataFrame to compare.
+    Returns:
+        difference_list (list): A list of column names that are present in one DataFrame but not in the other.
+    """
 
     column_list_one = set(dataframe_one.columns)
     column_list_two = set(dataframe_two.columns)
